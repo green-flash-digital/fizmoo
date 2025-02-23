@@ -3,11 +3,13 @@ import { tryHandle } from "ts-jolt/isomorphic";
 
 export const meta: Meta = {
   name: "build",
-  description: "",
+  description: "test description",
 };
 
 export const action: Action = async () => {
   const res = await tryHandle(build)();
-  if (res.hasError) throw res.error;
+  if (res.hasError) {
+    return console.error(res.hasError);
+  }
   console.log("Complete!", res.data);
 };

@@ -1,4 +1,8 @@
-import { BuildOptions, Plugin as EsbuildPlugin } from "esbuild";
+import {
+  build as esbuild,
+  BuildOptions,
+  Plugin as EsbuildPlugin,
+} from "esbuild";
 import { readFile, writeFile } from "node:fs/promises";
 import { FizmooCommands } from "./FizmooCommands.js";
 import { DotDirResponse } from "dotdir";
@@ -9,16 +13,23 @@ export class Fizmoo extends FizmooCommands {
   constructor(args: DotDirResponse<FizmooConfig>) {
     super(args);
     this.init();
+    this.build = this.build.bind(this);
   }
 
   get buildConfig(): BuildOptions {
     return {
+      bundle: true,
+      minify: true,
+      sourcemap: true,
+      format: "esm",
+      platform: "node",
+      target: ["node23.3.0"],
+      packages: "external",
       logOverride: {
         "empty-glob": "silent",
       },
       entryPoints: this.entryPoints,
       outdir: this.dirs.outDir,
-      minify: true,
       plugins: [
         this.pluginProcessFilesAndCommands(),
         this.pluginEnrichPackageJSON(),
@@ -90,5 +101,18 @@ export class Fizmoo extends FizmooCommands {
   private init() {
     console.log("Running PREBUILD...");
     console.log("Running PREBUILD... complete.");
+  }
+
+  /**
+   * Built in method that will build the manifest outright
+   * using the this.buildConfig
+   */
+  async build() {
+    try {
+      const res = await esbuild(this.buildConfig);
+      return res;
+    } catch (error) {
+      throw new Error(String(error));
+    }
   }
 }

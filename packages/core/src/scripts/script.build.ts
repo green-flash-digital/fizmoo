@@ -1,6 +1,7 @@
 import { DotDir } from "dotdir";
 import { Fizmoo } from "../fizmoo/Fizmoo.js";
 import { FizmooConfig } from "../schema/schema.js";
+import { tryHandle } from "ts-jolt/isomorphic";
 
 export async function build() {
   console.log("hello from build");
@@ -11,9 +12,11 @@ export async function build() {
 
   // Create a new Fizmoo
   const fizmoo = new Fizmoo(res);
-  const buildConfig = fizmoo.buildConfig;
-  console.log(buildConfig);
 
   // TODO: Create the manifest by building the buildConfig with esbuild
-  fizmoo.buildManifest();
+  const buildRes = await tryHandle(fizmoo.build)();
+  if (buildRes.hasError) {
+    throw buildRes.error;
+  }
+  console.log(buildRes);
 }

@@ -96,7 +96,7 @@ export class FizmooCommands {
    * into the command. We want esbuild to build them but we don't want to process those
    * imports as commands.
    */
-  processFile(filePath: string) {
+  protected processFile(filePath: string) {
     // ignore anything that isn't in the commands dir
     // LOG.debug("Loading command...");
     const isMatch = picomatch(this.entryPoints);
