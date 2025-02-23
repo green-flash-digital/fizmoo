@@ -1,0 +1,45 @@
+{
+  "name": "@fizmoo/core",
+  "version": "0.0.1",
+  "description": "Effortlessly create 100% type-safe, self-documenting Node.js CLIs by simply adding files to your file system.",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "build:lib": "yarn tsc --project ./tsconfig.build.json",
+    "build:schema": "yarn tsx ./scripts/create-json-schema.ts",
+    "build": "yarn build:schema & yarn build:lib",
+    "dev": "yarn build:lib --watch"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./schema": "./dist/schema.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/green-flash-digital/fizmoo.git",
+    "directory": "packages/fizmoo"
+  },
+  "author": "Drew DeCarme (drew@greenflash.digital)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/green-flash-digital/fizmoo/issues"
+  },
+  "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "@types/picomatch": "^3.0.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "zod-to-json-schema": "^3.24.3"
+  },
+  "dependencies": {
+    "dotdir": "^0.3.1",
+    "esbuild": "^0.25.0",
+    "picomatch": "^4.0.2",
+    "ts-jolt": "^0.2.1",
+    "zod": "^3.24.2"
+  }
+}

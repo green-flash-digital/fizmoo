@@ -1,0 +1,7 @@
+{
+  "extends": "ts-jolt/tsconfig/library",
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "module": "NodeNext"
+  }
+}

@@ -11,14 +11,34 @@ const RAW_RUNTIME_STATE =
   ],\
   "dependencyTreeRoots": [\
     {\
-      "name": "root-workspace-0b6124",\
+      "name": "@gfdigital/fizmoo",\
       "reference": "workspace:."\
+    },\
+    {\
+      "name": "fizmoo",\
+      "reference": "workspace:packages/cli"\
+    },\
+    {\
+      "name": "@fizmoo/core",\
+      "reference": "workspace:packages/core"\
+    },\
+    {\
+      "name": "@fizmoo/runtime",\
+      "reference": "workspace:packages/runtime"\
+    },\
+    {\
+      "name": "sandbox",\
+      "reference": "workspace:packages/sandbox"\
     }\
   ],\
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
-    ["root-workspace-0b6124", ["workspace:."]]\
+    ["@fizmoo/core", ["workspace:packages/core"]],\
+    ["@fizmoo/runtime", ["workspace:packages/runtime"]],\
+    ["@gfdigital/fizmoo", ["workspace:."]],\
+    ["fizmoo", ["workspace:packages/cli"]],\
+    ["sandbox", ["workspace:packages/sandbox"]]\
   ],\
   "fallbackPool": [\
   ],\
@@ -27,9 +47,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
-          ["zod", "npm:3.24.2"]\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -259,6 +277,44 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@fizmoo/core", [\
+      ["workspace:packages/core", {\
+        "packageLocation": "./packages/core/",\
+        "packageDependencies": [\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["@types/node", "npm:22.13.5"],\
+          ["@types/picomatch", "npm:3.0.2"],\
+          ["dotdir", "npm:0.3.1"],\
+          ["esbuild", "npm:0.25.0"],\
+          ["picomatch", "npm:4.0.2"],\
+          ["ts-jolt", "npm:0.2.1"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["zod", "npm:3.24.2"],\
+          ["zod-to-json-schema", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.24.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@fizmoo/runtime", [\
+      ["workspace:packages/runtime", {\
+        "packageLocation": "./packages/runtime/",\
+        "packageDependencies": [\
+          ["@fizmoo/runtime", "workspace:packages/runtime"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@gfdigital/fizmoo", [\
+      ["workspace:.", {\
+        "packageLocation": "./",\
+        "packageDependencies": [\
+          ["@gfdigital/fizmoo", "workspace:."],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["@isaacs/cliui", [\
       ["npm:8.0.2", {\
         "packageLocation": "../../../.yarn/berry/cache/@isaacs-cliui-npm-8.0.2-f4364666d5-10c0.zip/node_modules/@isaacs/cliui/",\
@@ -322,6 +378,25 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/@pkgjs-parseargs-npm-0.11.0-cd2a3fe948-10c0.zip/node_modules/@pkgjs/parseargs/",\
         "packageDependencies": [\
           ["@pkgjs/parseargs", "npm:0.11.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/node", [\
+      ["npm:22.13.5", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.13.5-4c5912eee2-10c0.zip/node_modules/@types/node/",\
+        "packageDependencies": [\
+          ["@types/node", "npm:22.13.5"],\
+          ["undici-types", "npm:6.20.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/picomatch", [\
+      ["npm:3.0.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-picomatch-npm-3.0.2-5d0a22321c-10c0.zip/node_modules/@types/picomatch/",\
+        "packageDependencies": [\
+          ["@types/picomatch", "npm:3.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -480,6 +555,17 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["dotdir", [\
+      ["npm:0.3.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/dotdir-npm-0.3.1-fca1c836ef-10c0.zip/node_modules/dotdir/",\
+        "packageDependencies": [\
+          ["dotdir", "npm:0.3.1"],\
+          ["esbuild", "npm:0.25.0"],\
+          ["ts-jolt", "npm:0.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["eastasianwidth", [\
       ["npm:0.2.0", {\
         "packageLocation": "../../../.yarn/berry/cache/eastasianwidth-npm-0.2.0-c37eb16bd1-10c0.zip/node_modules/eastasianwidth/",\
@@ -574,6 +660,21 @@ const RAW_RUNTIME_STATE =
           ["exponential-backoff", "npm:3.1.2"]\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["fizmoo", [\
+      ["workspace:packages/cli", {\
+        "packageLocation": "./packages/cli/",\
+        "packageDependencies": [\
+          ["fizmoo", "workspace:packages/cli"],\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["@fizmoo/runtime", "workspace:packages/runtime"],\
+          ["ts-jolt", "npm:0.2.1"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["zod", "npm:3.24.2"]\
+        ],\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["foreground-child", [\
@@ -961,6 +1062,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["picomatch", [\
+      ["npm:4.0.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/picomatch-npm-4.0.2-e93516ddf2-10c0.zip/node_modules/picomatch/",\
+        "packageDependencies": [\
+          ["picomatch", "npm:4.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["proc-log", [\
       ["npm:5.0.0", {\
         "packageLocation": "../../../.yarn/berry/cache/proc-log-npm-5.0.0-405173f9b4-10c0.zip/node_modules/proc-log/",\
@@ -1009,18 +1119,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["root-workspace-0b6124", [\
-      ["workspace:.", {\
-        "packageLocation": "./",\
-        "packageDependencies": [\
-          ["root-workspace-0b6124", "workspace:."],\
-          ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
-          ["zod", "npm:3.24.2"]\
-        ],\
-        "linkType": "SOFT"\
-      }]\
-    ]],\
     ["safer-buffer", [\
       ["npm:2.1.2", {\
         "packageLocation": "../../../.yarn/berry/cache/safer-buffer-npm-2.1.2-8d5c0b705e-10c0.zip/node_modules/safer-buffer/",\
@@ -1028,6 +1126,16 @@ const RAW_RUNTIME_STATE =
           ["safer-buffer", "npm:2.1.2"]\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["sandbox", [\
+      ["workspace:packages/sandbox", {\
+        "packageLocation": "./packages/sandbox/",\
+        "packageDependencies": [\
+          ["sandbox", "workspace:packages/sandbox"],\
+          ["fizmoo", "workspace:packages/cli"]\
+        ],\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["semver", [\
@@ -1173,6 +1281,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["ts-jolt", [\
+      ["npm:0.2.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/ts-jolt-npm-0.2.1-481be474e1-10c0.zip/node_modules/ts-jolt/",\
+        "packageDependencies": [\
+          ["ts-jolt", "npm:0.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["tsx", [\
       ["npm:4.19.3", {\
         "packageLocation": "../../../.yarn/berry/cache/tsx-npm-4.19.3-fb1194d166-10c0.zip/node_modules/tsx/",\
@@ -1190,6 +1307,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/typescript-patch-6da68bae26-10c0.zip/node_modules/typescript/",\
         "packageDependencies": [\
           ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["undici-types", [\
+      ["npm:6.20.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/undici-types-npm-6.20.0-bd21e669af-10c0.zip/node_modules/undici-types/",\
+        "packageDependencies": [\
+          ["undici-types", "npm:6.20.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1275,6 +1401,28 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/zod-npm-3.24.2-ab80dc0969-10c0.zip/node_modules/zod/",\
         "packageDependencies": [\
           ["zod", "npm:3.24.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["zod-to-json-schema", [\
+      ["npm:3.24.3", {\
+        "packageLocation": "../../../.yarn/berry/cache/zod-to-json-schema-npm-3.24.3-ce4111ed23-10c0.zip/node_modules/zod-to-json-schema/",\
+        "packageDependencies": [\
+          ["zod-to-json-schema", "npm:3.24.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.24.3", {\
+        "packageLocation": "./.yarn/__virtual__/zod-to-json-schema-virtual-5245d9fb51/4/.yarn/berry/cache/zod-to-json-schema-npm-3.24.3-ce4111ed23-10c0.zip/node_modules/zod-to-json-schema/",\
+        "packageDependencies": [\
+          ["zod-to-json-schema", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.24.3"],\
+          ["@types/zod", null],\
+          ["zod", "npm:3.24.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/zod",\
+          "zod"\
         ],\
         "linkType": "HARD"\
       }]\

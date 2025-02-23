@@ -1,0 +1,11 @@
+{
+  "name": "sandbox",
+  "version": "1.0.0",
+  "description": "A sandbox to test out the functionality of Fizmoo",
+  "private": true,
+  "author": "Drew DeCarme (drew@greenflash.digital)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fizmoo": "workspace:^"
+  }
+}
