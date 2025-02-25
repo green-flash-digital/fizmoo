@@ -188,7 +188,7 @@ __metadata:
     "@types/picomatch": "npm:^3.0.2"
     dotdir: "npm:^0.3.1"
     esbuild: "npm:^0.25.0"
-    isoscribe: "npm:^0.1.3"
+    isoscribe: "npm:^0.1.4"
     picomatch: "npm:^4.0.2"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
@@ -559,7 +559,7 @@ __metadata:
   dependencies:
     "@fizmoo/core": "workspace:^"
     "@fizmoo/runtime": "workspace:^"
-    isoscribe: "npm:^0.1.3"
+    isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.7.3"
@@ -713,12 +713,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isoscribe@npm:^0.1.3":
-  version: 0.1.3
-  resolution: "isoscribe@npm:0.1.3"
+"isoscribe@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "isoscribe@npm:0.1.4"
   dependencies:
     ts-jolt: "npm:^0.2.1"
-  checksum: 10c0/dd795fece8ba78bc5eb1f6301787d8ad3f382904f9f8eb501afa77070cfd95e6cc02a90de84fa04f6d25d82f6b1793ca701fd846fc0b190ee9646dc193caf875
+  checksum: 10c0/9f99be2622695bbd036041255e09905714ec6151a944cce27a5280244179692f07d40e37c1d58bdf62b3b2ec5c94f23cce3579ceb7dd5d8d5ff39c3cdd2750b2
   languageName: node
   linkType: hard
 

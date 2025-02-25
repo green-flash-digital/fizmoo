@@ -286,7 +286,7 @@ const RAW_RUNTIME_STATE =
           ["@types/picomatch", "npm:3.0.2"],\
           ["dotdir", "npm:0.3.1"],\
           ["esbuild", "npm:0.25.0"],\
-          ["isoscribe", "npm:0.1.3"],\
+          ["isoscribe", "npm:0.1.4"],\
           ["picomatch", "npm:4.0.2"],\
           ["ts-jolt", "npm:0.2.1"],\
           ["tsx", "npm:4.19.3"],\
@@ -670,7 +670,7 @@ const RAW_RUNTIME_STATE =
           ["fizmoo", "workspace:packages/cli"],\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["isoscribe", "npm:0.1.3"],\
+          ["isoscribe", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.1"],\
           ["tsx", "npm:4.19.3"],\
           ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
@@ -831,10 +831,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["isoscribe", [\
-      ["npm:0.1.3", {\
-        "packageLocation": "../../../.yarn/berry/cache/isoscribe-npm-0.1.3-296875df17-10c0.zip/node_modules/isoscribe/",\
+      ["npm:0.1.4", {\
+        "packageLocation": "../../../.yarn/berry/cache/isoscribe-npm-0.1.4-e557eef28e-10c0.zip/node_modules/isoscribe/",\
         "packageDependencies": [\
-          ["isoscribe", "npm:0.1.3"],\
+          ["isoscribe", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.1"]\
         ],\
         "linkType": "HARD"\

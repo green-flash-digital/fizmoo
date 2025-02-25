@@ -5,11 +5,22 @@ import {
 } from "esbuild";
 import { readFile, rm, writeFile } from "node:fs/promises";
 import { FizmooCommands } from "./FizmooCommands.js";
-import { DotDirResponse } from "dotdir";
-import { FizmooConfig } from "../schema/schema.js";
+import { DotDir, DotDirResponse } from "dotdir";
 import { tryHandle } from "ts-jolt/isomorphic";
 import { writeFileRecursive } from "ts-jolt/node";
 import path from "node:path";
+import { FizmooConfig } from "./_fizmoo.config.js";
+import { LOG } from "./_fizmoo.utils.js";
+
+export async function createFizmoo(_options: { test: string }) {
+  // Get the configuration from the .fizmoo directory
+  const dotDir = new DotDir<FizmooConfig>(); // included in this closure since build is a one time thing
+  const res = await dotDir.find({ dirName: "fizmoo" });
+
+  // Create a new Fizmoo
+  const fizmoo = new Fizmoo(res);
+  return fizmoo;
+}
 
 // Intake the parsed options
 export class Fizmoo extends FizmooCommands {
@@ -74,7 +85,7 @@ export class Fizmoo extends FizmooCommands {
           );
           for (const [key, value] of packageJsonPropertiesEntries) {
             if (!(key in packageJson)) {
-              // LOG.debug(`Adding '${key}' to package.json file.`);
+              LOG.debug(`Adding '${key}' to package.json file.`);
               packageJson[key] = value;
             }
           }
@@ -93,7 +104,6 @@ export class Fizmoo extends FizmooCommands {
       name: "esbuild-plugin-buttery-commands-manifest",
       setup: (build) => {
         build.onEnd(async () => {
-          console.log("esbuild:onEnd");
           await this._manifest.validate();
           await this._manifest.build();
         });

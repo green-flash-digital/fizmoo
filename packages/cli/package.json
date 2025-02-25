@@ -6,7 +6,7 @@
   "sideEffects": false,
   "bin": "./bin/index.js",
   "scripts": {
-    "build": "yarn tsx ./scripts/build-fizmoo-cli-with-fizmoo.ts"
+    "cli:build": "yarn tsx ./scripts/build-fizmoo-cli-with-fizmoo.ts"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@fizmoo/core": "workspace:^",
     "@fizmoo/runtime": "workspace:^",
-    "isoscribe": "^0.1.3",
+    "isoscribe": "^0.1.4",
     "ts-jolt": "^0.2.1",
     "zod": "^3.24.2"
   },

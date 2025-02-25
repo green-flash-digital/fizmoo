@@ -1,12 +1,12 @@
 import { DotDirResponse } from "dotdir";
-import { FizmooConfig } from "../schema/schema.js";
 import path from "node:path";
 import picomatch from "picomatch";
 import { tryHandle } from "ts-jolt/isomorphic";
-import { Command, Options } from "../types/types.js";
+import { Command, Options } from "./_fizmoo.types.js";
 import { FizmooManifest, ManifestEntry } from "./FizmooManifest.js";
-import { LOG } from "../utils/LOG.js";
 import { printAsBullets } from "isoscribe";
+import { LOG } from "./_fizmoo.utils.js";
+import { FizmooConfig } from "./_fizmoo.config.js";
 
 const defaultOptions: Options = {
   help: {
@@ -26,8 +26,8 @@ type FizmooDirs = {
 
 export class FizmooCommands {
   protected _manifest: FizmooManifest;
-  config: DotDirResponse<FizmooConfig>["config"];
-  meta: Omit<DotDirResponse<FizmooConfig>, "config">["meta"];
+  protected config: DotDirResponse<FizmooConfig>["config"];
+  protected meta: Omit<DotDirResponse<FizmooConfig>, "config">["meta"];
 
   constructor(args: DotDirResponse<FizmooConfig>) {
     this._manifest = new FizmooManifest();

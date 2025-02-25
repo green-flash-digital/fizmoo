@@ -1,4 +1,5 @@
-import { Args, Options } from "../types/types.js";
+import { Args, Options } from "./_fizmoo.types.js";
+import { LOG } from "./_fizmoo.utils.js";
 
 export type Manifest = {
   [key: string]: ManifestEntry;
@@ -76,10 +77,8 @@ export class FizmooManifest {
   }
 
   async validate() {
-    console.log("Validating the manifest");
-    console.log(
-      JSON.stringify(Object.fromEntries(this.manifest.entries()), null, 2)
-    );
+    LOG.checkpointStart("Manifest:validate");
+    LOG.checkpointEnd();
   }
   async build() {}
 }

@@ -1,15 +1,16 @@
-import { build } from "@fizmoo/core";
 import { tryHandle } from "ts-jolt/isomorphic";
-import { LOG } from "../utils/util.log";
+import { build } from "../src/scripts/script.build.js";
+import { LOG } from "../src/utils/index.js";
 
-async function buildFizmooWithFizmoo() {
-  LOG.info("Building the Fizmoo CLI...");
-  const res = await tryHandle(build)();
-  if (res.hasError) {
-    return console.error(res.error);
-  }
-
-  LOG.success("Building the Fizmoo CLI... complete.");
+async function buildFizmooCLIWithFizmoo() {
+  LOG.info("Building the Fizmoo CLI with Fizmoo...");
+  const res = await tryHandle(build)({
+    autoFix: true,
+    logLevel: "info",
+    prompt: true,
+  });
+  if (res.hasError) LOG.fatal(res.error);
+  LOG.success("Building the Fizmoo CLI with Fizmoo... done.");
 }
 
-buildFizmooWithFizmoo();
+buildFizmooCLIWithFizmoo();
