@@ -1,5 +1,5 @@
 <div align="center" style="padding-bottom: 30px">
-  <img align="center" width="50%" src="./packages/fizmoo/public/fizmoo-logo.png" style="margin: 0 auto;"/>
+  <img align="center" width="50%" src="./packages/core/public/fizmoo-logo.png" style="margin: 0 auto;"/>
   <h1>Fizmoo!</h1>
   <p>Effortlessly create 100% type-safe, self-documenting Node.js CLIs—simply by adding files to your file system.</p>
 </div >

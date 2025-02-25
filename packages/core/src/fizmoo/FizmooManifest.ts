@@ -75,6 +75,11 @@ export class FizmooManifest {
     this.manifest = new Map<string, ManifestEntry>();
   }
 
-  async validate() {}
+  async validate() {
+    console.log("Validating the manifest");
+    console.log(
+      JSON.stringify(Object.fromEntries(this.manifest.entries()), null, 2)
+    );
+  }
   async build() {}
 }

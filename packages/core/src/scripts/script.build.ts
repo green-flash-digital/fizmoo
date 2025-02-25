@@ -4,7 +4,7 @@ import { FizmooConfig } from "../schema/schema.js";
 import { tryHandle } from "ts-jolt/isomorphic";
 
 export async function build() {
-  console.log("hello from build");
+  console.log("build:start");
 
   // Get the configuration
   const dotDir = new DotDir<FizmooConfig>(); // included in this closure since build is a one time thing
@@ -18,5 +18,6 @@ export async function build() {
   if (buildRes.hasError) {
     throw buildRes.error;
   }
-  console.log(buildRes);
+
+  console.log("build:end");
 }

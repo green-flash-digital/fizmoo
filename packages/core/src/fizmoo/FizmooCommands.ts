@@ -4,7 +4,9 @@ import path from "node:path";
 import picomatch from "picomatch";
 import { tryHandle } from "ts-jolt/isomorphic";
 import { Command, Options } from "../types/types.js";
-import { FizmooManifest } from "./FizmooManifest.js";
+import { FizmooManifest, ManifestEntry } from "./FizmooManifest.js";
+import { LOG } from "../utils/LOG.js";
+import { printAsBullets } from "isoscribe";
 
 const defaultOptions: Options = {
   help: {
@@ -96,23 +98,24 @@ export class FizmooCommands {
    * into the command. We want esbuild to build them but we don't want to process those
    * imports as commands.
    */
-  protected processFile(filePath: string) {
+  protected async processFile(filePath: string) {
     // ignore anything that isn't in the commands dir
-    // LOG.debug("Loading command...");
+    LOG.debug("Loading command...");
     const isMatch = picomatch(this.entryPoints);
     const filename = path.parse(filePath).name;
     const isCommandFile = isMatch(filePath) && !filename.startsWith("_");
     if (!isCommandFile) {
-      // LOG.debug(`Loading command... INVALID_COMMAND. Ignoring: "${filePath}"`);
+      LOG.debug(`Loading command... INVALID_COMMAND. Ignoring: "${filePath}"`);
       return;
     }
-    // LOG.debug(
-    //   `Loading command... VALID_COMMAND. Parsing command at path: ${filePath}...`
-    // );
-    this.parseAndStoreCommand(filePath);
+    LOG.debug(
+      `Loading command... VALID_COMMAND. Parsing command at path: ${filePath}...`
+    );
+    await this.parseAndStoreCommand(filePath);
   }
 
   private async parseAndStoreCommand(filePath: string) {
+    LOG.debug("Processing command file", filePath);
     const cmdRelPath = this.getCommandRelPath(filePath);
     const cmdId = this.getCommandId(cmdRelPath);
     const cmdSegments = this.getCommandSegments(cmdId, filePath);
@@ -121,7 +124,7 @@ export class FizmooCommands {
     const cmdMeta = this.getCommandMeta(cmdModule, filePath);
     const cmdParents = this.getCommandParents(cmdSegments);
 
-    this.manifest.set(cmdId, {
+    const manifestEntry: ManifestEntry = {
       id: cmdId,
       name: cmdMeta.name,
       description: cmdMeta.description,
@@ -146,7 +149,14 @@ export class FizmooCommands {
           false
         ),
       },
-    });
+    };
+
+    LOG.debug("Adding command to manifest", filePath);
+    this.manifest.set(cmdId, manifestEntry);
+    LOG.trace(
+      "Manifest entries",
+      JSON.stringify(Object.fromEntries(this.manifest.entries()), null, 2)
+    );
   }
 
   /**
@@ -174,12 +184,11 @@ export class FizmooCommands {
       const cmdSegments = cmdId.split(".");
       return cmdSegments;
     } catch {
-      throw `"${cmdPath}" is malformed`;
-      //   throw `"${cmdPath}" is malformed. Command files should either be follow the below conventions:
-      // ${printAsBullets([
-      //   ".buttery/commands/<sub-command>.<sub-command>.<...sub-command>/command.ts",
-      //   ".buttery/<sub-command>.ts",
-      // ])}`;
+      throw `"${cmdPath}" is malformed. Command files should either be follow the below conventions:
+      ${printAsBullets([
+        ".buttery/commands/<sub-command>.<sub-command>.<...sub-command>/command.ts",
+        ".buttery/<sub-command>.ts",
+      ])}`;
     }
   }
 

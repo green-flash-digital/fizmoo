@@ -3,10 +3,13 @@ import {
   BuildOptions,
   Plugin as EsbuildPlugin,
 } from "esbuild";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import { FizmooCommands } from "./FizmooCommands.js";
 import { DotDirResponse } from "dotdir";
 import { FizmooConfig } from "../schema/schema.js";
+import { tryHandle } from "ts-jolt/isomorphic";
+import { writeFileRecursive } from "ts-jolt/node";
+import path from "node:path";
 
 // Intake the parsed options
 export class Fizmoo extends FizmooCommands {
@@ -44,7 +47,7 @@ export class Fizmoo extends FizmooCommands {
       setup: (build) => {
         build.onLoad({ filter: /.*/, namespace: "file" }, async (args) => {
           // load the command
-          this.processFile(args.path);
+          await this.processFile(args.path);
           return null;
         });
       },
@@ -90,6 +93,7 @@ export class Fizmoo extends FizmooCommands {
       name: "esbuild-plugin-buttery-commands-manifest",
       setup: (build) => {
         build.onEnd(async () => {
+          console.log("esbuild:onEnd");
           await this._manifest.validate();
           await this._manifest.build();
         });
@@ -98,9 +102,27 @@ export class Fizmoo extends FizmooCommands {
   }
 
   // prebuild
-  private init() {
-    console.log("Running PREBUILD...");
-    console.log("Running PREBUILD... complete.");
+  private async init() {
+    // Clean out the bin dir
+    const res = await tryHandle(rm)(this.dirs.binDir, {
+      recursive: true,
+      force: true,
+    });
+    if (res.hasError) throw res.error;
+
+    // Create the entry file
+    const entryFilePath = path.resolve(this.dirs.binDir, "./index.js");
+    const entryFileContent = `import run from "@fizmoo/runtime";
+import manifest from "./fizmoo.manifest.js";
+
+// run the CLI against the manifest
+run(manifest, { cwd: import.meta.dirname });
+`;
+    const entryRes = await tryHandle(writeFileRecursive)(
+      entryFilePath,
+      entryFileContent
+    );
+    if (entryRes.hasError) throw res.error;
   }
 
   /**
