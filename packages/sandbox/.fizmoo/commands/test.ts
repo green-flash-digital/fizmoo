@@ -1,6 +1,6 @@
-import type { CommandMeta } from "../../src/lib/index.js";
+import { Meta } from "@fizmoo/core";
 
-export const meta: CommandMeta = {
+export const meta: Meta = {
   name: "normalize",
   description:
     "A command that tests out the file normalization and module imports",

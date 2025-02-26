@@ -1,11 +1,6 @@
-import {
-  type CommandAction,
-  type CommandMeta,
-  defineArgs,
-  defineOptions,
-} from "../../src/lib/index.js";
+import { Action, defineArgs, defineOptions, Meta } from "@fizmoo/core";
 
-export const meta: CommandMeta = {
+export const meta: Meta = {
   name: "parse",
   description: "A script to test single level args and options parsing",
 };
@@ -27,6 +22,6 @@ export const options = defineOptions({
   },
 });
 
-export const action: CommandAction<typeof args, typeof options> = (params) => {
+export const action: Action<typeof args, typeof options> = (params) => {
   console.log("Hello from the parse command.", params);
 };

@@ -1145,7 +1145,12 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/sandbox/",\
         "packageDependencies": [\
           ["sandbox", "workspace:packages/sandbox"],\
-          ["fizmoo", "workspace:packages/cli"]\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["fizmoo", "workspace:packages/cli"],\
+          ["isoscribe", "npm:0.1.4"],\
+          ["ts-jolt", "npm:0.2.1"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\

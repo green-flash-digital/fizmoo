@@ -999,7 +999,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "sandbox@workspace:packages/sandbox"
   dependencies:
+    "@fizmoo/core": "workspace:^"
     fizmoo: "workspace:^"
+    isoscribe: "npm:^0.1.4"
+    ts-jolt: "npm:^0.2.1"
+    tsx: "npm:^4.19.3"
+    typescript: "npm:^5.7.3"
   languageName: unknown
   linkType: soft
 

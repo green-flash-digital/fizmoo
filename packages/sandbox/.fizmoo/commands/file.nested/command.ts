@@ -1,13 +1,7 @@
-import { testCommandGlob } from "./test-glob.something";
+import { Action, defineArgs, defineOptions, Meta } from "@fizmoo/core";
+import { testCommandGlob } from "./test-glob.something.js";
 
-import {
-  type CommandAction,
-  type CommandMeta,
-  defineArgs,
-  defineOptions,
-} from "../../../src/lib/index.js";
-
-export const meta: CommandMeta = {
+export const meta: Meta = {
   name: "nested",
   description:
     "🚗 A command that tests out the nested flat-file sub-command convention",
@@ -59,7 +53,7 @@ export const options = defineOptions({
   },
 });
 
-export const action: CommandAction<typeof args, typeof options> = async ({
+export const action: Action<typeof args, typeof options> = async ({
   options,
   args,
 }) => {

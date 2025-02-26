@@ -13,7 +13,7 @@ import { LOG } from "./util.logger.js";
  * a function are well formed and properly defaulted. This ostensibly turns functional option
  * reconciliation and defaulting into a one liner.
  */
-export function parseAndValidateOptions<T>(
+export function validateOptions<T>(
   schema: ZodSchema<T>,
   options: Partial<T> | undefined
 ) {

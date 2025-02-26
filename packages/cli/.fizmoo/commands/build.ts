@@ -1,7 +1,11 @@
-import { type Meta, type Action, defineOptions } from "@fizmoo/core";
+import {
+  type Meta,
+  type Action,
+  defineOptions,
+  createFizmoo,
+} from "@fizmoo/core";
 import { tryHandle } from "ts-jolt/isomorphic";
-import { build } from "../../src/scripts/index.js";
-import { LOG } from "../../src/utils/index.js";
+import { buildOptionsSchema, LOG, validateOptions } from "./_utils/index.js";
 
 export const meta: Meta = {
   name: "build",
@@ -32,10 +36,11 @@ export const options = defineOptions({
 });
 
 export const action: Action<never, typeof options> = async ({ options }) => {
-  const res = await tryHandle(build)({
-    autoFix: options.autofix,
-    logLevel: options.debug ? "debug" : "info",
-    prompt: options.prompt,
+  const opts = validateOptions(buildOptionsSchema, options);
+  LOG.logLevel = opts.logLevel;
+
+  const res = await tryHandle(createFizmoo)({
+    test: "",
   });
 
   if (res.hasError) {
