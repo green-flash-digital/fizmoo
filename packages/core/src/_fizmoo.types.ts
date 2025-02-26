@@ -10,7 +10,7 @@ export type Meta = {
  * **Note**: At this point,
  * it's not necessary to use this since we're not going to
  * use this constant to infer any types anywhere, but if you're
- * into consistency, this can be used in place of staticly typing
+ * into consistency, this can be used in place of staticky typing
  * your `meta` export with `Meta`
  */
 export const defineMeta = (meta: Meta) => meta;

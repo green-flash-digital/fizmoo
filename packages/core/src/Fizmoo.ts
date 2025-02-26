@@ -117,14 +117,12 @@ export class Fizmoo extends FizmooCommands {
       name: "esbuild-plugin-buttery-commands-manifest",
       setup: (build) => {
         build.onEnd(async () => {
-          await this._manifest.validate();
-          await this._manifest.build();
+          await this.validateManifest();
         });
       },
     };
   }
 
-  // prebuild
   private async init() {
     // Clean out the bin dir
     const res = await tryHandle(rm)(this.dirs.binDir, {
