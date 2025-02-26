@@ -4,7 +4,6 @@ import picomatch from "picomatch";
 import { tryHandle } from "ts-jolt/isomorphic";
 import { Command, Options } from "./_fizmoo.types.js";
 import { FizmooManifest, ManifestEntry } from "./FizmooManifest.js";
-import { printAsBullets } from "isoscribe";
 import { LOG } from "./_fizmoo.utils.js";
 import { FizmooConfig } from "./_fizmoo.config.js";
 
@@ -30,9 +29,11 @@ export class FizmooCommands {
   protected meta: Omit<DotDirResponse<FizmooConfig>, "config">["meta"];
 
   constructor(args: DotDirResponse<FizmooConfig>) {
-    this._manifest = new FizmooManifest();
     this.config = args.config;
     this.meta = args.meta;
+    this._manifest = new FizmooManifest({
+      outFilePath: path.resolve(this.dirs.binDir, "./fizmoo.manifest.json"),
+    });
   }
 
   /**
@@ -100,29 +101,29 @@ export class FizmooCommands {
    */
   protected async processFile(filePath: string) {
     // ignore anything that isn't in the commands dir
-    LOG.debug("Loading command...");
+    LOG.debug(`Processing file... ${filePath}`);
     const isMatch = picomatch(this.entryPoints);
     const filename = path.parse(filePath).name;
     const isCommandFile = isMatch(filePath) && !filename.startsWith("_");
     if (!isCommandFile) {
-      LOG.debug(`Loading command... INVALID_COMMAND. Ignoring: "${filePath}"`);
+      LOG.debug(`Command file: ❌. Ignoring...`);
       return;
     }
-    LOG.debug(
-      `Loading command... VALID_COMMAND. Parsing command at path: ${filePath}...`
-    );
+    LOG.debug(`Command file: ✅. Parsing... `);
     await this.parseAndStoreCommand(filePath);
   }
 
   private async parseAndStoreCommand(filePath: string) {
-    LOG.debug("Processing command file", filePath);
-    const cmdRelPath = this.getCommandRelPath(filePath);
-    const cmdId = this.getCommandId(cmdRelPath);
-    const cmdSegments = this.getCommandSegments(cmdId, filePath);
-    const cmdModule = await this.getFizmooCommand(filePath);
-    const cmdModulePath = this.getFizmooCommandPath(cmdRelPath);
+    LOG.debug(`Parsing command...`);
+    const cmdRelPath = this.getCmdRelPath(filePath);
+    const cmdId = this.getCmdId(cmdRelPath);
+    const cmdSegments = cmdId.split(".");
+    const cmdParent = this.getCmdParent(cmdSegments);
+    const cmdModule = await this.importCmd(filePath);
+    const cmdOutPath = this.getCmdOutPath(cmdRelPath);
     const cmdMeta = this.getCommandMeta(cmdModule, filePath);
-    const cmdParents = this.getCommandParents(cmdSegments);
+    const cmdHasAction = typeof cmdModule.action !== "undefined";
+    LOG.debug(`Parsing command... done.`);
 
     const manifestEntry: ManifestEntry = {
       id: cmdId,
@@ -134,29 +135,24 @@ export class FizmooCommands {
       },
       args: cmdModule.args ?? undefined,
       segments: cmdSegments,
-      path: cmdModulePath,
+      outPath: cmdOutPath,
+      parentCommand: cmdParent,
       help: "",
-      subCommands: [],
-      meta: {
-        parentCommands: cmdParents,
-        hasAction: typeof cmdModule.action !== "undefined",
-        level: cmdSegments.length,
-        hasRequiredArgs: Object.values(cmdModule.args ?? {}).reduce(
-          (accum, arg) => {
-            if (arg.required) return true;
-            return accum;
-          },
-          false
-        ),
-      },
+      hasAction: cmdHasAction,
+      level: cmdSegments.length,
+      hasRequiredArgs: Object.values(cmdModule.args ?? {}).reduce(
+        (accum, arg) => {
+          if (arg.required) return true;
+          return accum;
+        },
+        false
+      ),
     };
 
-    LOG.debug("Adding command to manifest", filePath);
+    LOG.debug(`Adding "${cmdId}" to manifest...`);
     this.manifest.set(cmdId, manifestEntry);
-    LOG.trace(
-      "Manifest entries",
-      JSON.stringify(Object.fromEntries(this.manifest.entries()), null, 2)
-    );
+    LOG.trace("Record", this.manifest.get(cmdId));
+    LOG.debug(`Adding "${cmdId}" to manifest... done.`);
   }
 
   /**
@@ -164,32 +160,26 @@ export class FizmooCommands {
    * commands directory. This allows each command to have a specific
    * ID based upon it's normalized path.
    */
-  private getCommandId(cmdRelPath: string) {
+  private getCmdId(cmdRelPath: string) {
     // normalize the command id
     let cmdId = cmdRelPath.replace(/\/command.ts/, "");
     cmdId = this.replaceExt(cmdId, "");
     return cmdId;
   }
 
-  private getCommandRelPath(filePath: string) {
+  private getCmdParent(cmdSegments: string[]) {
+    let segments = cmdSegments;
+    segments.pop();
+    const parentId = segments.join(".");
+    return parentId || null;
+  }
+
+  private getCmdRelPath(filePath: string) {
     return path.relative(this.dirs.commandsDir, filePath);
   }
 
-  private getFizmooCommandPath(cmdRelPath: string) {
+  private getCmdOutPath(cmdRelPath: string) {
     return this.replaceExt(path.join("./commands", cmdRelPath), ".js");
-  }
-
-  private getCommandSegments(cmdId: string, cmdPath: string) {
-    try {
-      const cmdSegments = cmdId.split(".");
-      return cmdSegments;
-    } catch {
-      throw `"${cmdPath}" is malformed. Command files should either be follow the below conventions:
-      ${printAsBullets([
-        ".buttery/commands/<sub-command>.<sub-command>.<...sub-command>/command.ts",
-        ".buttery/<sub-command>.ts",
-      ])}`;
-    }
   }
 
   private getCommandMeta(cmdModule: Command, cmdPath: string) {
@@ -206,20 +196,20 @@ export class FizmooCommands {
     return cmdModule.meta;
   }
 
-  private getCommandParents(cmdSegments: string[]) {
-    const result = [];
-    let prefix = "";
+  // private getCommandParents(cmdSegments: string[]) {
+  //   const result = [];
+  //   let prefix = "";
 
-    for (let i = 0; i < cmdSegments.length - 1; i++) {
-      // Stop before the last element
-      prefix = prefix ? `${prefix}.${cmdSegments[i]}` : cmdSegments[i];
-      result.push(prefix);
-    }
+  //   for (let i = 0; i < cmdSegments.length - 1; i++) {
+  //     // Stop before the last element
+  //     prefix = prefix ? `${prefix}.${cmdSegments[i]}` : cmdSegments[i];
+  //     result.push(prefix);
+  //   }
 
-    return result;
-  }
+  //   return result;
+  // }
 
-  private async getFizmooCommand(cmdPath: string) {
+  private async importCmd(cmdPath: string) {
     async function importModule() {
       try {
         const cmdModule = (await import(cmdPath)) as Command;
