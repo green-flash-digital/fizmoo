@@ -1,12 +1,18 @@
-import { tryHandle } from "ts-jolt/isomorphic";
 import { createFizmoo } from "@fizmoo/core";
 import { LOG } from "./util.logger.js";
 
 async function buildSandboxCLIWithFizmoo() {
-  LOG.info("Building the Sandbox CLI with Fizmoo...");
-  const res = await tryHandle(createFizmoo)({ test: "random" });
-  if (res.hasError) LOG.fatal(res.error);
-  LOG.success("Building the Sandbox CLI with Fizmoo... done.");
+  try {
+    LOG.info("Building the Sandbox CLI with Fizmoo...");
+    const fizmoo = await createFizmoo({
+      logLevel: "trace",
+      env: "development",
+    });
+    await fizmoo.build();
+    LOG.success("Building the Sandbox CLI with Fizmoo... done.");
+  } catch (error) {
+    LOG.fatal(new Error(String(error)));
+  }
 }
 
 buildSandboxCLIWithFizmoo();

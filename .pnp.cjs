@@ -670,6 +670,7 @@ const RAW_RUNTIME_STATE =
           ["fizmoo", "workspace:packages/cli"],\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
+          ["@types/node", "npm:22.13.5"],\
           ["isoscribe", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.1"],\
           ["tsx", "npm:4.19.3"],\
@@ -1146,6 +1147,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["sandbox", "workspace:packages/sandbox"],\
           ["@fizmoo/core", "workspace:packages/core"],\
+          ["@types/node", "npm:22.13.5"],\
           ["fizmoo", "workspace:packages/cli"],\
           ["isoscribe", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.1"],\

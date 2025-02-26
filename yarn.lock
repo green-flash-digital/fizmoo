@@ -559,6 +559,7 @@ __metadata:
   dependencies:
     "@fizmoo/core": "workspace:^"
     "@fizmoo/runtime": "workspace:^"
+    "@types/node": "npm:^22.13.5"
     isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
@@ -1000,11 +1001,14 @@ __metadata:
   resolution: "sandbox@workspace:packages/sandbox"
   dependencies:
     "@fizmoo/core": "workspace:^"
+    "@types/node": "npm:^22.13.5"
     fizmoo: "workspace:^"
     isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.7.3"
+  bin:
+    sandbox: ./bin/index.js
   languageName: unknown
   linkType: soft
 

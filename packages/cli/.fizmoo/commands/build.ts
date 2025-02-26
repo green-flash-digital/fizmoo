@@ -39,12 +39,12 @@ export const action: Action<never, typeof options> = async ({ options }) => {
   const opts = validateOptions(buildOptionsSchema, options);
   LOG.logLevel = opts.logLevel;
 
-  const res = await tryHandle(createFizmoo)({
-    test: "",
-  });
-
-  if (res.hasError) {
-    return console.error(res.hasError);
+  try {
+    LOG.info("Building...");
+    const fizmoo = await createFizmoo({ logLevel: "trace" });
+    await fizmoo.build();
+    LOG.success("Building... done.");
+  } catch (error) {
+    LOG.fatal(new Error(String(error)));
   }
-  LOG.debug("Complete!", res.data);
 };

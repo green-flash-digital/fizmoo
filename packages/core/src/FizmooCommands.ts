@@ -40,7 +40,7 @@ export class FizmooCommands {
    */
   protected get dirs() {
     const commandsDirName = this.config.commandsDir ?? "commands";
-    const binDir = path.resolve(this.meta.dirPath, "./bin");
+    const binDir = path.resolve(this.meta.dirPath, "../bin");
     const rootDir = path.resolve(this.meta.dirPath, "../");
     const dirs: FizmooDirs = {
       commandsDir: path.resolve(this.meta.dirPath, `./${commandsDirName}`),

@@ -11,8 +11,22 @@ import { writeFileRecursive } from "ts-jolt/node";
 import path from "node:path";
 import { FizmooConfig } from "./_fizmoo.config.js";
 import { LOG } from "./_fizmoo.utils.js";
+import { IsoScribeLogLevel } from "isoscribe";
 
-export async function createFizmoo(_options: { test: string }) {
+export async function createFizmoo(options: {
+  logLevel?: IsoScribeLogLevel;
+  env?: "development" | "production";
+}) {
+  // Set some options based upon the defaults
+  const logLevel: IsoScribeLogLevel =
+    (process.env.FIZMOO_LOG_LEVEL as IsoScribeLogLevel) ??
+    options.logLevel ??
+    "info";
+  process.env.FIZMOO_ENV =
+    options.env ?? process.env.FIZMOO_ENV ?? "development";
+
+  LOG.logLevel = logLevel;
+
   // Get the configuration from the .fizmoo directory
   const dotDir = new DotDir<FizmooConfig>(); // included in this closure since build is a one time thing
   const res = await dotDir.find({ dirName: "fizmoo" });
@@ -33,8 +47,7 @@ export class Fizmoo extends FizmooCommands {
   get buildConfig(): BuildOptions {
     return {
       bundle: true,
-      minify: true,
-      sourcemap: true,
+      minify: process.env.FIZMOO_ENV === "production",
       format: "esm",
       platform: "node",
       target: ["node23.3.0"],
