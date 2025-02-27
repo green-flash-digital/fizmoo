@@ -4,21 +4,22 @@
   "description": "A sandbox to test out the functionality of Fizmoo",
   "type": "module",
   "private": true,
-  "bin": "./bin/index.js",
   "author": "Drew DeCarme (drew@greenflash.digital)",
   "license": "Apache-2.0",
+  "bin": "./bin/index.js",
   "scripts": {
     "build": "yarn tsx ./scripts/build-sandbox-cli-with-fizmoo.ts"
   },
-  "dependencies": {
+  "devDependencies": {
     "@fizmoo/core": "workspace:^",
+    "@types/node": "^22.13.5",
     "fizmoo": "workspace:^",
     "isoscribe": "^0.1.4",
-    "ts-jolt": "^0.2.1"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.5",
+    "ts-jolt": "^0.2.1",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@fizmoo/runtime": "workspace:^"
   }
 }

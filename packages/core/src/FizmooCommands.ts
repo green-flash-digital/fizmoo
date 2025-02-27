@@ -2,12 +2,12 @@ import { DotDirResponse } from "dotdir";
 import path from "node:path";
 import picomatch from "picomatch";
 import { exhaustiveMatchGuard, tryHandle } from "ts-jolt/isomorphic";
-import { Command } from "./_fizmoo.types.js";
 import {
+  Command,
   FizmooManifestEntry,
   FizmooManifestEntryData,
-  LOG,
-} from "./_fizmoo.utils.js";
+} from "./_fizmoo.types.js";
+import { LOG } from "./_fizmoo.utils.js";
 import { FizmooConfig } from "./_fizmoo.config.js";
 import { writeFile } from "node:fs/promises";
 import { printAsBullets } from "isoscribe";
@@ -177,16 +177,6 @@ export class FizmooCommands {
     filePath: string
   ): Promise<FizmooManifestEntryData> {
     const module = await this.importCommandModule(filePath);
-
-    if (!module.meta) {
-      throw `"${filePath}" does not have a "meta" export. This is a required value. Please export constant "meta" with "name" and "description" as key/values.`;
-    }
-    if (!module.meta?.name) {
-      throw `"${filePath}" does not have a "meta.name" export. This is a required value.`;
-    }
-    if (!module.meta?.description) {
-      throw `"${filePath}" does not have a "meta.description" export. This is a required value.`;
-    }
 
     return {
       name: module.meta?.name ?? "",

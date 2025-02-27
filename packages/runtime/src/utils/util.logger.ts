@@ -1,7 +1,7 @@
 import { Isoscribe } from "isoscribe";
 
 export const LOG = new Isoscribe({
-  name: "@fizmoo/core",
+  name: "@fizmoo/runtime",
   logFormat: "string",
   logLevel: "debug",
 });

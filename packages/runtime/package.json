@@ -2,18 +2,34 @@
   "name": "@fizmoo/runtime",
   "version": "0.0.1",
   "description": "The fizmoo runtime that interprets the generated fizmoo manifest",
-  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn tsx ./scripts/build.ts",
+    "dev": "yarn tsx ./scripts/dev.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/green-flash-digital/fizmoo.git"
+    "url": "git+ssh://git@github.com/green-flash-digital/fizmoo.git",
+    "directory": "packages/runtime"
   },
   "author": "Drew DeCarme (drew@greenflash.digital)",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/green-flash-digital/fizmoo/issues"
   },
-  "homepage": "https://github.com/green-flash-digital/fizmoo#readme"
+  "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
+  "dependencies": {
+    "ts-jolt": "^0.2.1"
+  },
+  "devDependencies": {
+    "@fizmoo/core": "workspace:^",
+    "@types/node": "^22.13.5",
+    "esbuild": "^0.25.0",
+    "isoscribe": "^0.1.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
 }

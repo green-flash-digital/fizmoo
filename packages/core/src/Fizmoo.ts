@@ -133,11 +133,11 @@ export class Fizmoo extends FizmooCommands {
 
     // Create the entry file
     const entryFilePath = path.resolve(this.dirs.binDir, "./index.js");
-    const entryFileContent = `import run from "@fizmoo/runtime";
-import manifest from "./fizmoo.manifest.js";
+    const entryFileContent = `import { FizmooRuntime } from "@fizmoo/runtime";
+import manifest from "./fizmoo.manifest.json" with { type: "json" };
 
-// run the CLI against the manifest
-run(manifest, { cwd: import.meta.dirname });
+const runtime = new FizmooRuntime(manifest, { cwd: import.meta.dirname });
+runtime.execute();
 `;
     const entryRes = await tryHandle(writeFileRecursive)(
       entryFilePath,

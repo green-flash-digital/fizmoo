@@ -302,7 +302,14 @@ const RAW_RUNTIME_STATE =
       ["workspace:packages/runtime", {\
         "packageLocation": "./packages/runtime/",\
         "packageDependencies": [\
-          ["@fizmoo/runtime", "workspace:packages/runtime"]\
+          ["@fizmoo/runtime", "workspace:packages/runtime"],\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["@types/node", "npm:22.13.5"],\
+          ["esbuild", "npm:0.25.0"],\
+          ["isoscribe", "npm:0.1.4"],\
+          ["ts-jolt", "npm:0.2.1"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1157,6 +1164,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["sandbox", "workspace:packages/sandbox"],\
           ["@fizmoo/core", "workspace:packages/core"],\
+          ["@fizmoo/runtime", "workspace:packages/runtime"],\
           ["@types/node", "npm:22.13.5"],\
           ["fizmoo", "workspace:packages/cli"],\
           ["isoscribe", "npm:0.1.4"],\

@@ -202,6 +202,14 @@ __metadata:
 "@fizmoo/runtime@workspace:^, @fizmoo/runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@fizmoo/runtime@workspace:packages/runtime"
+  dependencies:
+    "@fizmoo/core": "workspace:^"
+    "@types/node": "npm:^22.13.5"
+    esbuild: "npm:^0.25.0"
+    isoscribe: "npm:^0.1.4"
+    ts-jolt: "npm:^0.2.1"
+    tsx: "npm:^4.19.3"
+    typescript: "npm:^5.7.3"
   languageName: unknown
   linkType: soft
 
@@ -1009,6 +1017,7 @@ __metadata:
   resolution: "sandbox@workspace:packages/sandbox"
   dependencies:
     "@fizmoo/core": "workspace:^"
+    "@fizmoo/runtime": "workspace:^"
     "@types/node": "npm:^22.13.5"
     fizmoo: "workspace:^"
     isoscribe: "npm:^0.1.4"
