@@ -30,6 +30,10 @@ export type FizmooManifestEntryData = {
    */
   args: Args | undefined;
   /**
+   * Does the command have an action export
+   */
+  hasAction: boolean;
+  /**
    * A string literal representation of the help menu
    */
   help: string;
@@ -47,10 +51,15 @@ export type FizmooManifestEntry = {
    * into one directory.
    */
   file: string;
+
+  src: string;
   /**
-   * The ID of the parent of the command. If there isn't a parent
-   * then the parent command will be null
+   * The IDs of the command parents
    */
   parents: string[] | null;
+  /**
+   * The ids of the immediate sub-commands
+   */
+  subCommands: string[] | null;
   data: FizmooManifestEntryData;
 };

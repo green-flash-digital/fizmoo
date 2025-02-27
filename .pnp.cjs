@@ -287,6 +287,7 @@ const RAW_RUNTIME_STATE =
           ["dotdir", "npm:0.3.1"],\
           ["esbuild", "npm:0.25.0"],\
           ["isoscribe", "npm:0.1.4"],\
+          ["picocolors", "npm:1.1.1"],\
           ["picomatch", "npm:4.0.2"],\
           ["ts-jolt", "npm:0.2.1"],\
           ["tsx", "npm:4.19.3"],\
@@ -1071,6 +1072,15 @@ const RAW_RUNTIME_STATE =
           ["path-scurry", "npm:1.11.1"],\
           ["lru-cache", "npm:10.4.3"],\
           ["minipass", "npm:7.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["picocolors", [\
+      ["npm:1.1.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/picocolors-npm-1.1.1-4fede47cf1-10c0.zip/node_modules/picocolors/",\
+        "packageDependencies": [\
+          ["picocolors", "npm:1.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
