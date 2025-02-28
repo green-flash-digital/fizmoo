@@ -137,7 +137,12 @@ export class Fizmoo extends FizmooCommands {
 import manifest from "./fizmoo.manifest.json" with { type: "json" };
 
 const runtime = new FizmooRuntime(manifest, { cwd: import.meta.dirname });
-runtime.execute();
+
+try {
+  runtime.execute();
+} catch (error) {
+  runtime.throw(error);
+}
 `;
     const entryRes = await tryHandle(writeFileRecursive)(
       entryFilePath,

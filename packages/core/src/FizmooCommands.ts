@@ -12,14 +12,18 @@ import { FizmooConfig } from "./_fizmoo.config.js";
 import { writeFile } from "node:fs/promises";
 import { printAsBullets } from "isoscribe";
 import pc from "picocolors";
+import { fizmooConstants } from "./_fizmoo.utils.public.js";
 
+type MalformedCommandMode =
+  | { type: "CLI_NAME_CONFLICT" }
+  | { type: "MISSING_ATTRIBUTE"; description: string };
 export class FizmooCommands {
   manifest: Map<string, FizmooManifestEntry>;
   protected config: DotDirResponse<FizmooConfig>["config"];
   protected meta: Omit<DotDirResponse<FizmooConfig>, "config">["meta"];
   private _errorReport: {
     MISSING_COMMANDS: Set<string>;
-    MALFORMED_COMMAND: Map<string, string>;
+    MALFORMED_COMMAND: Map<string, string[]>;
   };
   /**
    * An array of string paths that are used as globs to resolve
@@ -37,6 +41,7 @@ export class FizmooCommands {
    * are well formed
    */
   entryPoints: string[];
+  rootCommandId: string;
 
   constructor(args: DotDirResponse<FizmooConfig>) {
     this.config = args.config;
@@ -46,6 +51,7 @@ export class FizmooCommands {
       MISSING_COMMANDS: new Set(),
       MALFORMED_COMMAND: new Map(),
     };
+    this.rootCommandId = fizmooConstants.COMMAND_ROOT;
     this.entryPoints = [...new Array(20)]
       .map((_, i) => {
         const numOfStars = i + 1;
@@ -105,6 +111,10 @@ export class FizmooCommands {
     const commandParents = this.getCommandParents(commandId);
     const commandOutFile = this.getCommandOutFile(commandRelPath);
     const commandData = await this.getCommandData(filePath);
+
+    if (commandId === this.rootCommandId) {
+      this._addMalformedCommandError(filePath, { type: "CLI_NAME_CONFLICT" });
+    }
 
     LOG.debug(`Adding "${commandId}" to manifest...`);
     this.manifest.set(commandId, {
@@ -233,16 +243,16 @@ export class FizmooCommands {
 
       // Validate Meta
       if (!command.data.name) {
-        this._errorReport.MALFORMED_COMMAND.set(
-          commandId,
-          "Missing a `meta.name`."
-        );
+        this._addMalformedCommandError(command.src, {
+          type: "MISSING_ATTRIBUTE",
+          description: "Missing a `meta.name`.",
+        });
       }
       if (!command.data.description) {
-        this._errorReport.MALFORMED_COMMAND.set(
-          commandId,
-          "Missing a `meta.description`."
-        );
+        this._addMalformedCommandError(command.src, {
+          type: "MISSING_ATTRIBUTE",
+          description: "Missing a `meta.description`.",
+        });
       }
 
       // Validate Action
@@ -256,12 +266,13 @@ export class FizmooCommands {
         return accum;
       }, false);
       const hasAction = !command.data.hasAction;
-      console.log({ hasSubCommands, hasAction });
       if (hasSubCommands && !hasAction) {
-        this._errorReport.MALFORMED_COMMAND.set(
-          commandId,
-          "This an `action`. Please export an action from this file."
-        );
+        // TODO: This isn't working
+        this._addMalformedCommandError(command.src, {
+          type: "MISSING_ATTRIBUTE",
+          description:
+            "Missing an `action`. Please export an action from this file.",
+        });
       }
 
       LOG.debug(`Validating "${commandId}"... done.`);
@@ -270,6 +281,34 @@ export class FizmooCommands {
     this.printErrorReport();
 
     LOG.checkpointEnd();
+  }
+
+  private _addMalformedCommandError(
+    filePath: string,
+    error: MalformedCommandMode
+  ) {
+    const currentError =
+      this._errorReport.MALFORMED_COMMAND.get(filePath) ?? [];
+
+    function getErrorText() {
+      switch (error.type) {
+        case "CLI_NAME_CONFLICT":
+          return `${pc.bold(
+            "CLI_NAME_CONFIG"
+          )}: You cannot have a command that has the same name as the name of your CLI listed in the './fizmoo/config.json'. Either change the name of the CLI in the '/.fizmoo/config.json' or change the name of the file`;
+
+        case "MISSING_ATTRIBUTE":
+          return `${pc.bold("MISSING_ATTRIBUTE")}: ${error.description}`;
+
+        default:
+          exhaustiveMatchGuard(error);
+      }
+    }
+
+    this._errorReport.MALFORMED_COMMAND.set(
+      filePath,
+      currentError.concat(getErrorText())
+    );
   }
 
   private printErrorReport() {
@@ -288,9 +327,16 @@ ${printAsBullets([...this._errorReport.MISSING_COMMANDS.values()])}
     }
 
     if (this._errorReport.MALFORMED_COMMAND.size > 0) {
+      const errors = [...this._errorReport.MALFORMED_COMMAND.entries()]
+        .map(
+          ([filePath, value]) =>
+            `${pc.underline(filePath)}${printAsBullets(value)}`
+        )
+        .join("\n\n");
       report = report.concat(`
-${pc.underline("Invalid Commands:")}
-TBD  
+${pc.bold(pc.redBright("Invalid Commands:"))}
+
+${errors} 
 `);
     }
 
@@ -324,7 +370,10 @@ ${report}
   ) {
     helpMenu.push(this.formatHelpCommandTitle("Usage:"));
 
-    const expression = `${this.config.name} ${commandId.replace(".", " ")}`;
+    const expression =
+      commandId === this.rootCommandId
+        ? this.config.name
+        : `${this.config.name} ${commandId.replace(".", " ")}`;
     const optionEntires = Object.entries(options ?? {});
     const argEntries = Object.entries(args ?? {});
     const argVals = argEntries.reduce(
@@ -524,35 +573,63 @@ ${report}
     LOG.checkpointStart("Enriching manifest");
     const allCommandIds = [...this.manifest.keys()];
 
+    // Add the root command
+    this.manifest.set(this.rootCommandId, {
+      src: "",
+      file: "",
+      parents: [],
+      subCommands: [],
+      data: {
+        name: this.config.name,
+        description: this.config.description,
+        options: undefined,
+        args: undefined,
+        hasAction: false,
+        help: "",
+      },
+    });
+
     for (const [commandId, commandEntry] of this.manifest.entries()) {
       LOG.debug(`"${commandId}" - Finding sub-commands...`);
+      // We're keeping track of this so when we update a command,
+      // we can set the updates to this variable to pass to
+      // another section that needs the progressively updated command
+      let enrichedCommandEntry = commandEntry;
+
       // Enrich the entry.subCommands
       const commandLevel = this.getCmdSegments(commandId).length;
       const subCommands = allCommandIds.filter((cmdId) => {
         const cmdLevel = this.getCmdSegments(cmdId).length;
-        const isSubCommand =
-          cmdId.startsWith(commandId) && commandLevel + 1 === cmdLevel;
-        return isSubCommand;
+
+        // If it's the root command, all cmd levels that are 1 are
+        // sub commands
+        if (commandId === this.rootCommandId) {
+          return cmdLevel === 1;
+        }
+
+        return cmdId.startsWith(commandId) && commandLevel + 1 === cmdLevel;
       });
       // we do this before we set the menu since the the menu
       // methods need the subCommands value in order to properly calculate
       // and format the menu methods
-      this.manifest.set(commandId, { ...commandEntry, subCommands });
+      enrichedCommandEntry = { ...commandEntry, subCommands };
+      this.manifest.set(commandId, enrichedCommandEntry);
       LOG.debug(`"${commandId}" - Finding sub-commands... done`);
 
       // Enrich the entry.menu
       LOG.debug(`"${commandId}" - Building help menu...`);
       const helpMenu: string[] = [];
-      this.setHelpCommandUsage(commandId, commandEntry, helpMenu);
-      this.setHelpCommandDescription(commandEntry, helpMenu);
-      this.setHelpCommandSubCommands(commandEntry, helpMenu);
-      this.setHelpCommandArgs(commandEntry, helpMenu);
-      this.setHelpCommandOptions(commandEntry, helpMenu);
+      this.setHelpCommandUsage(commandId, enrichedCommandEntry, helpMenu);
+      this.setHelpCommandDescription(enrichedCommandEntry, helpMenu);
+      this.setHelpCommandSubCommands(enrichedCommandEntry, helpMenu);
+      this.setHelpCommandArgs(enrichedCommandEntry, helpMenu);
+      this.setHelpCommandOptions(enrichedCommandEntry, helpMenu);
       const help = helpMenu.join("\n");
-      this.manifest.set(commandId, {
+      enrichedCommandEntry = {
         ...commandEntry,
         data: { ...commandEntry.data, help },
-      });
+      };
+      this.manifest.set(commandId, enrichedCommandEntry);
       LOG.debug(`"${commandId}" - Building help menu... done`);
     }
     LOG.checkpointEnd();
