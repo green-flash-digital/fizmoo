@@ -6,6 +6,7 @@ import {
 } from "@fizmoo/core";
 import path from "node:path";
 import { exhaustiveMatchGuard, tryHandleSync } from "ts-jolt/isomorphic";
+import { RuntimeError } from "./utils/util.error.js";
 
 type RuntimeOption =
   | {
@@ -15,32 +16,37 @@ type RuntimeOption =
     }
   | { type: "alias"; value: string | undefined; raw: string };
 type RuntimeOptionsMap = Map<string, RuntimeOption>;
-type RuntimeArgsSet = Set<string>;
+type RuntimeArg = string | undefined;
+type RuntimeArgsMap = Map<string, RuntimeArg>;
 
 export class FizmooRuntime {
   _manifest: Map<string, FizmooManifestEntry>;
   private _commandOptions: Map<string, string | number | boolean>;
   private _commandArgs: Map<any, string | number | boolean>;
   private _cwd: string;
+  private _errors: RuntimeError;
 
   constructor(manifest: FizmooManifest, options?: { cwd?: string }) {
     this._manifest = new Map(Object.entries(manifest));
-    (this._cwd = options?.cwd ?? import.meta.dirname),
-      (this._commandOptions = new Map());
+    this._cwd = options?.cwd ?? import.meta.dirname;
+    this._commandOptions = new Map();
     this._commandArgs = new Map();
+    this._errors = new RuntimeError({
+      cliName:
+        this._manifest.get(fizmooConstants.COMMAND_ROOT)?.data.name ??
+        "<your cli>",
+    });
     this._parseExpression = this._parseExpression.bind(this);
-    this._validateAndSetCommandOptions =
-      this._validateAndSetCommandOptions.bind(this);
-    this._validateAndSetCommandArgs =
-      this._validateAndSetCommandArgs.bind(this);
+    this._setCommandOptions = this._setCommandOptions.bind(this);
+    this._setCommandArgs = this._setCommandArgs.bind(this);
   }
 
   /**
    * Parses the options from the expression into a workable format
    * that can be used to then compare against the command option definition
    */
-  private _parseRuntimeOptions(rawOptions: string[]): RuntimeOptionsMap {
-    const parsedExpressionOptions = new Map<string, RuntimeOption>();
+  private _parseExpressionOptions(rawOptions: string[]): RuntimeOptionsMap {
+    const optionsMap = new Map<string, RuntimeOption>();
 
     for (const rawOption of rawOptions) {
       const [optionKey, optionValue] = rawOption.split("=");
@@ -48,7 +54,7 @@ export class FizmooRuntime {
       // Handle an expanded alias
       if (optionKey.startsWith("--")) {
         const optionId = optionKey.replace("--", "");
-        parsedExpressionOptions.set(optionId, {
+        optionsMap.set(optionId, {
           type: "expanded",
           value: optionValue,
           raw: rawOption,
@@ -59,7 +65,7 @@ export class FizmooRuntime {
       // Handle an alias option
       if (optionKey.startsWith("-")) {
         const optionId = optionKey.replace("-", "");
-        parsedExpressionOptions.set(optionId, {
+        optionsMap.set(optionId, {
           type: "alias",
           value: optionValue,
           raw: rawOption,
@@ -67,19 +73,23 @@ export class FizmooRuntime {
         continue;
       }
 
-      throw `"${rawOption}" has been parsed as an option and is malformed. Use an alias prefixed with a "-" or a expanded option prefixed with a "--".`;
+      throw this._errors.COMMAND_NOT_FOUND(rawOption);
     }
 
-    return parsedExpressionOptions;
+    return optionsMap;
   }
 
   /**
    * Parses the args fro the expression into a workable format
    * that can be used to then compare against the command args definition
-   * TODO: Parse out the equals sign
    */
-  private _parseRuntimeArgs(rawArgs: string[]): RuntimeArgsSet {
-    return new Set([...rawArgs]);
+  private _parseExpressionArgs(rawArgs: string[]): RuntimeArgsMap {
+    const argsMap = new Map<string, RuntimeArg>();
+    for (const rawArg of rawArgs) {
+      const [argKey, argValue] = rawArg.split("=");
+      argsMap.set(argKey, argValue);
+    }
+    return argsMap;
   }
 
   /**
@@ -112,7 +122,7 @@ export class FizmooRuntime {
     );
 
     if (commandId === "" && argsRaw.length > 0) {
-      throw `Unknown command "${argsRaw[0]}"`;
+      throw this._errors.COMMAND_NOT_FOUND(argsRaw[0]);
     }
 
     if (commandId === "") {
@@ -120,8 +130,8 @@ export class FizmooRuntime {
     }
 
     // Parse the options into a workable format
-    const options = this._parseRuntimeOptions(optionsRaw);
-    const args = this._parseRuntimeArgs(argsRaw);
+    const options = this._parseExpressionOptions(optionsRaw);
+    const args = this._parseExpressionArgs(argsRaw);
 
     return {
       commandId,
@@ -137,14 +147,14 @@ export class FizmooRuntime {
    * valid against the option definitions, this method will add them to the options
    * are passed to the action
    */
-  private _validateAndSetCommandOptions(
+  private _setCommandOptions(
     commandDef: FizmooManifestEntry,
-    rOptions: RuntimeOptionsMap
+    runtimeOptions: RuntimeOptionsMap
   ): void {
     const optionsDef = commandDef.data.options ?? {};
 
     // Loop through all of the runtime options to validate & parse
-    for (const [rOptionId, rOption] of rOptions) {
+    for (const [rOptionId, rOption] of runtimeOptions) {
       let optionDef: Option | undefined = undefined;
 
       // Get the option definition. If the option that was provided at runtime
@@ -155,7 +165,11 @@ export class FizmooRuntime {
         case "expanded":
           optionDef = optionsDef[rOptionId];
           if (!optionDef) {
-            throw `"${rOptionId}" is not a valid option.`;
+            throw this._errors.OPTION_NOT_FOUND(
+              rOptionId,
+              "expanded",
+              optionsDef
+            );
           }
           break;
 
@@ -170,7 +184,7 @@ export class FizmooRuntime {
             undefined
           );
           if (!optionDef) {
-            throw `"${rOptionId}" is not a valid alias to an option.`;
+            throw this._errors.OPTION_NOT_FOUND(rOptionId, "alias", optionsDef);
           }
           break;
 
@@ -192,10 +206,14 @@ export class FizmooRuntime {
 
           // Value hasn't been reconciled from a default or logic yet so it's technically invalid
           if (typeof value !== "boolean") {
-            throw `Invalid value "${rOption.value}" for boolean option "${rOptionId}". Possible values include:
+            throw this._errors.OPTION_VALIDATION_FAILED({
+              optionId: rOptionId,
+              message: `Invalid value "${rOption.value}" for boolean option "${rOptionId}".`,
+              suggestion: `Possible values include:
   --${rOptionId}=true
   --${rOptionId}=false
-  --${rOptionId} (absence of value: true || default set in command)`;
+  --${rOptionId} (absence of value: true || default set in command)`,
+            });
           }
 
           this._commandOptions.set(rOptionId, value);
@@ -209,7 +227,10 @@ export class FizmooRuntime {
 
           // Check for a type of string
           if (typeof value !== "string") {
-            throw `Option "${rOptionId}" must have a string value`;
+            throw this._errors.OPTION_VALIDATION_FAILED({
+              optionId: rOptionId,
+              message: `Option "${rOptionId}" must have a string value`,
+            });
           }
 
           this._commandOptions.set(rOptionId, value);
@@ -223,12 +244,18 @@ export class FizmooRuntime {
 
           // check for a number
           if (Number.isNaN(value)) {
-            throw `Option "${rOptionId}" must be a parsable number.`;
+            throw this._errors.OPTION_VALIDATION_FAILED({
+              optionId: rOptionId,
+              message: `Option "${rOptionId}" must be a parsable number.`,
+            });
           }
 
           // Check for a value
           if (typeof value === "undefined") {
-            throw `Expected "${rOptionId}" to have a value.`;
+            throw this._errors.OPTION_VALIDATION_FAILED({
+              optionId: rOptionId,
+              message: `Expected "${rOptionId}" to have a value.`,
+            });
           }
           this._commandOptions.set(rOptionId, value);
           break;
@@ -243,7 +270,10 @@ export class FizmooRuntime {
     // parsed and added to the _commandOptions
     for (const [optionId, optionDef] of Object.entries(optionsDef)) {
       if (optionDef.required && !this._commandOptions.has(optionId)) {
-        throw `Missing required option "${optionId}"`;
+        throw this._errors.OPTION_VALIDATION_FAILED({
+          optionId: optionId,
+          message: `Missing required option "${optionId}"`,
+        });
       }
     }
   }
@@ -255,19 +285,22 @@ export class FizmooRuntime {
    * valid against the option definitions, this method will add them to the args
    * are passed to the action
    */
-  private _validateAndSetCommandArgs(
+  private _setCommandArgs(
     commandDef: FizmooManifestEntry,
-    runtimeArgs: RuntimeArgsSet
+    runtimeArgs: RuntimeArgsMap
   ) {
     const argsDef = commandDef.data.args ?? {};
 
     // Loop through all of the runtime args to validate & parse
-    for (const runtimeArgValue of runtimeArgs) {
-      const argDef = argsDef[runtimeArgValue];
+    for (const [rArgId, rArg] of runtimeArgs) {
+      const argDef = argsDef[rArgId];
 
       // Validate that the runtime arg is expected to be there
       if (!argDef) {
-        throw new Error(`Unexpected positional argument: "${runtimeArgValue}"`);
+        throw this._errors.ARG_VALIDATION_FAILED({
+          argId: rArgId,
+          message: `Unexpected positional argument: "${rArg}"`,
+        });
       }
 
       // Process the runtime option against the option definition
@@ -275,85 +308,104 @@ export class FizmooRuntime {
       switch (argDef.type) {
         case "boolean":
           // Handle boolean arguments
-          const value =
-            runtimeArgValue?.toLowerCase() === "true" ||
-            runtimeArgValue === "1";
-          this._commandArgs.set(argDef.name, value ?? argDef.default ?? false);
+          const value = rArg?.toLowerCase() === "true" || rArg === "1";
+          this._commandArgs.set(rArgId, value ?? argDef.default ?? false);
           break;
 
         case "string":
           // Handle string arguments
-          if (typeof runtimeArgValue !== "string") {
-            throw new Error(`Expected a string for argument "${argDef.name}"`);
+          if (typeof rArg !== "string") {
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `The argument "${rArgId}" expected a string value but was called with "${rArg}"`,
+              suggestion: `Ensure you are setting the argument equal to a string value e.g. "${rArgId}=<your value>"`,
+            });
           }
 
           // Check for length constraints
           if (argDef.length) {
             const { min, max } = argDef.length;
-            if (min !== undefined && runtimeArgValue.length < min) {
-              throw new Error(
-                `Argument "${argDef.name}" must have at least ${min} characters`
-              );
+            if (min !== undefined && rArg.length < min) {
+              throw this._errors.ARG_VALIDATION_FAILED({
+                argId: rArgId,
+                message: `Argument "${rArgId}" must have at least ${min} characters`,
+              });
             }
-            if (max !== undefined && runtimeArgValue.length > max) {
-              throw new Error(
-                `Argument "${argDef.name}" must have at most ${max} characters`
-              );
+            if (max !== undefined && rArg.length > max) {
+              throw this._errors.ARG_VALIDATION_FAILED({
+                argId: rArgId,
+                message: `Argument "${rArgId}" must have at most ${max} characters`,
+              });
             }
           }
 
           // Check for choices
-          if (argDef.choices && !argDef.choices.includes(runtimeArgValue)) {
-            throw new Error(
-              `Argument "${argDef.name}" must be one of: ${argDef.choices.join(
+          if (argDef.choices && !argDef.choices.includes(rArg)) {
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `"${rArg}" is not included in the available choices for ${rArgId}`,
+              suggestion: `Argument "${rArgId}" must be one of: ${argDef.choices.join(
                 ", "
-              )}`
-            );
+              )}`,
+            });
           }
 
           // Custom validation
-          if (argDef.validate && !argDef.validate(runtimeArgValue)) {
-            throw new Error(`Validation failed for argument "${argDef.name}"`);
+          if (argDef.validate && !argDef.validate(rArg)) {
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `Validation failed for argument "${rArgId}"`,
+            });
           }
 
           // Add the arg to the
-          this._commandArgs.set(argDef.name, runtimeArgValue);
+          this._commandArgs.set(rArgId, rArg);
           break;
 
         case "number":
           // Handle number arguments
-          const parsedValue = Number(runtimeArgValue);
+          const parsedValue = Number(rArg);
           if (Number.isNaN(parsedValue)) {
-            throw new Error(`Expected a number for argument "${argDef.name}"`);
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `Expected a number for argument "${rArgId}"`,
+            });
           }
 
           // Check for range constraints
           if (argDef.range) {
             const { min, max } = argDef.range;
             if (min !== undefined && parsedValue < min) {
-              throw new Error(
-                `Argument "${argDef.name}" must be at least ${min}`
-              );
+              throw this._errors.ARG_VALIDATION_FAILED({
+                argId: rArgId,
+                message: `Argument "${rArgId}" must be at least ${min}`,
+              });
             }
             if (max !== undefined && parsedValue > max) {
-              throw new Error(
-                `Argument "${argDef.name}" must be at most ${max}`
-              );
+              throw this._errors.ARG_VALIDATION_FAILED({
+                argId: rArgId,
+                message: `Argument "${rArgId}" must be at most ${max}`,
+              });
             }
           }
 
           // Check for choices
           if (argDef.choices && !argDef.choices.includes(parsedValue)) {
-            throw new Error(
-              `Argument "${argDef.name}" must be one of: ${argDef.choices.join(
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `"${rArg}" is not included in the available choices for ${rArgId}`,
+              suggestion: `Argument "${rArgId}" must be one of: ${argDef.choices.join(
                 ", "
-              )}`
-            );
+              )}`,
+            });
           }
 
           // Custom validation
           if (argDef.validate && !argDef.validate(parsedValue)) {
-            throw new Error(`Validation failed for argument "${argDef.name}"`);
+            throw this._errors.ARG_VALIDATION_FAILED({
+              argId: rArgId,
+              message: `Validation failed for argument "${rArgId}"`,
+            });
           }
           break;
 
@@ -365,8 +417,11 @@ export class FizmooRuntime {
     // Validate that all of the required args have been correctly
     // parsed and added to the _commandArgs
     for (const [argId, argDef] of Object.entries(argsDef)) {
-      if (argDef.required && !this._commandOptions.has(argId)) {
-        throw `Missing required option "${argId}"`;
+      if (argDef.required && !this._commandArgs.has(argId)) {
+        throw this._errors.ARG_VALIDATION_FAILED({
+          argId: argId,
+          message: `Missing required arg "${argId}"`,
+        });
       }
     }
   }
@@ -375,14 +430,14 @@ export class FizmooRuntime {
     // Get the runtime command
     const commandRes = tryHandleSync(this._parseExpression)();
     if (commandRes.hasError) {
-      return this.throw(commandRes.error);
+      return this._errors.log(commandRes.error);
     }
 
     // Get the command definition from the runtime
     const { commandId, args, options } = commandRes.data;
     const commandDef = this._manifest.get(commandRes.data.commandId);
     if (!commandDef) {
-      return this.throw(`Unknown Command "${commandId}"`);
+      return this._errors.log(this._errors.COMMAND_NOT_FOUND(commandId));
     }
 
     // Check to see if we should just print the menu
@@ -392,38 +447,30 @@ export class FizmooRuntime {
     }
 
     // Validate, parse, and set the command options
-    const optionsFn = this._validateAndSetCommandOptions;
+    const optionsFn = this._setCommandOptions;
     const optionRes = tryHandleSync(optionsFn)(commandDef, options);
     if (optionRes.hasError) {
-      return this.throw(optionRes.error);
+      return this._errors.log(optionRes.error);
     }
 
     // Validate, parse, and set the command args
-    const argsFn = this._validateAndSetCommandArgs;
+    const argsFn = this._setCommandArgs;
     const argsRes = tryHandleSync(argsFn)(commandDef, args);
     if (argsRes.hasError) {
-      return this.throw(argsRes.error);
+      return this._errors.log(argsRes.error);
     }
 
+    // Run the action
     if (!commandDef.data.hasAction) {
-      this.warn(
-        "Command is valid but has no action. You should not be seeing this warning. Please log an issue."
-      );
+      return this._errors.log(this._errors.MISSING_ACTION(commandId));
     }
     const importPath = path.resolve(this._cwd, commandDef.file);
     const module = await import(importPath);
     const action = module.action;
+
     await action({
       options: Object.fromEntries(this._commandOptions.entries()),
       args: Object.fromEntries(this._commandArgs.entries()),
     });
-  }
-
-  warn(error: any) {
-    console.error(`\x1b[93m${String(error)}\x1b[0m`);
-  }
-
-  throw(error: any) {
-    console.error(`\x1b[91m${String(error)}\x1b[0m`);
   }
 }

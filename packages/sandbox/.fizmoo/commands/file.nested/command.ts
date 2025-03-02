@@ -57,7 +57,7 @@ export const action: Action<typeof args, typeof options> = async ({
   options,
   args,
 }) => {
-  console.log(options.test);
+  console.log(options);
   console.log(args);
   testCommandGlob();
 };
