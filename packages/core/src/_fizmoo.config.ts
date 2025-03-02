@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const fizmooConfigSchema = z.object({
-  $schema: z.string().default("https://schema.fizmoo.greenflash.digital"),
+  $schema: z
+    .string()
+    .optional()
+    .default("https://schema.fizmoo.greenflash.digital"),
   /**
    * The name of the CLI. This is also the name of
    * the execution string that will instantiate the
@@ -15,7 +18,7 @@ export const fizmooConfigSchema = z.object({
   /**
    * The version of the CLI
    */
-  version: z.string().optional(),
+  version: z.string().optional().default("0.0.1"),
   /**
    * The location of the commands directory. By default
    * it will be inside of the commands folder, however if it's outside

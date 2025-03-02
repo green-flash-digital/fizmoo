@@ -19,14 +19,23 @@ export const options = defineOptions({
     type: "boolean",
     required: false,
   },
+  autoInit: {
+    alias: "ai",
+    type: "boolean",
+    description:
+      "Automatically creates the directories and files needed if they aren't present. This is an extension of the `init` command.",
+    default: true,
+  },
 });
 
 export const action: Action<never, typeof options> = async ({ options }) => {
   const opts = validateOptions(buildOptionsSchema, {
     logLevel: options.debug ? "debug" : "info",
+    autoInit: options.autoInit,
   });
   LOG.logLevel = opts.logLevel;
 
-  const fizmoo = await createFizmoo({ logLevel: opts.logLevel });
+  const fizmoo = await createFizmoo({ ...opts, env: "development" });
+  if (!fizmoo) return;
   await fizmoo.dev();
 };

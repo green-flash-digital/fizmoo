@@ -36,6 +36,7 @@
     "zod-to-json-schema": "^3.24.3"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.3.2",
     "dotdir": "^0.3.1",
     "esbuild": "^0.25.0",
     "isoscribe": "^0.1.4",

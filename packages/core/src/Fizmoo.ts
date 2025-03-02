@@ -10,12 +10,14 @@ import { tryHandle } from "ts-jolt/isomorphic";
 import { writeFileRecursive } from "ts-jolt/node";
 import path from "node:path";
 import { FizmooConfig } from "./_fizmoo.config.js";
-import { LOG } from "./_fizmoo.utils.js";
+import { bootstrap, LOG } from "./_fizmoo.utils.js";
 import { IsoScribeLogLevel } from "isoscribe";
+import { confirm } from "@inquirer/prompts";
 
 export async function createFizmoo(options: {
   logLevel?: IsoScribeLogLevel;
   env?: "development" | "production";
+  autoInit: boolean;
 }) {
   // Set some options based upon the defaults
   const logLevel: IsoScribeLogLevel =
@@ -27,13 +29,47 @@ export async function createFizmoo(options: {
 
   LOG.logLevel = logLevel;
 
+  LOG.debug("Locating the .fizmoo directory & config.json");
   // Get the configuration from the .fizmoo directory
   const dotDir = new DotDir<FizmooConfig>(); // included in this closure since build is a one time thing
-  const res = await dotDir.find({ dirName: "fizmoo" });
+  const dirRes = await tryHandle(dotDir.find)({ dirName: "fizmoo" });
+  if (dirRes.data) {
+    // Create a new Fizmoo
+    LOG.debug("Creating a fizmoo instance");
+    const fizmoo = new Fizmoo(dirRes.data);
+    return fizmoo;
+  }
 
-  // Create a new Fizmoo
-  const fizmoo = new Fizmoo(res);
-  return fizmoo;
+  LOG.warn(`Unable to located the necessary directories to initialize fizmoo.`);
+  let shouldBootstrap = false;
+
+  // If auto init is enabled, then bootstrap the directories
+  if (options.autoInit) {
+    LOG.debug(
+      "AutoInit has been enabled. Bootstrapping the required fizmoo directories and files."
+    );
+    shouldBootstrap = true;
+  }
+
+  // Prompt the user if they would like to bootstrap the directories
+  if (!options.autoInit) {
+    shouldBootstrap = await confirm({
+      message: "Would you like to answer a few prompts to bootstrap fizmoo?",
+    });
+  }
+
+  if (!shouldBootstrap) {
+    return LOG.fatal(dirRes.error);
+  }
+
+  const resBootstrap = await tryHandle(bootstrap)();
+  if (resBootstrap.hasError) {
+    return LOG.fatal(resBootstrap.error);
+  }
+
+  // Recursively attempt to create the fizmoo instance again. This should only
+  // be called once since we're assuming that the configuration was written successfully
+  createFizmoo(options);
 }
 
 // Intake the parsed options
@@ -42,7 +78,7 @@ export class Fizmoo extends FizmooCommands {
 
   constructor(args: DotDirResponse<FizmooConfig>) {
     super(args);
-    this.init();
+    this._init();
     this.build = this.build.bind(this);
     this.dev = this.dev.bind(this);
     this._isInDevMode = false;
@@ -151,7 +187,7 @@ export class Fizmoo extends FizmooCommands {
     };
   }
 
-  private async init() {
+  private async _init() {
     // Clean out the bin dir
     const res = await tryHandle(rm)(this.dirs.binDir, {
       recursive: true,

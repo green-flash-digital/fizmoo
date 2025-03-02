@@ -4,7 +4,8 @@
   "description": "A sandbox to test out the functionality of fizmoo CLI",
   "type": "module",
   "scripts": {
-    "build": "yarn fizmoo build"
+    "build": "yarn fizmoo build --debug",
+    "dev": "yarn fizmoo dev --debug"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "dependencies": {
     "fizmoo": "workspace:^"
+  },
+  "bin": {
+    "@fizmoo/cli-sandbox": "./bin/index.js"
   }
 }

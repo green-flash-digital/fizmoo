@@ -6,6 +6,10 @@ const baseOptionsSchema = z.object({
    * @default info
    */
   logLevel: z.union([z.literal("info"), z.literal("debug")]),
+  /**
+   * An option to run create the required directories and files
+   */
+  autoInit: z.boolean().optional().default(true),
 });
 export type FizmooBaseOptions = z.infer<typeof baseOptionsSchema>;
 
