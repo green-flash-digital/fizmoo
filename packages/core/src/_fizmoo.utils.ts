@@ -1,6 +1,6 @@
 import { input } from "@inquirer/prompts";
 import { Isoscribe } from "isoscribe";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { tryHandle } from "ts-jolt/isomorphic";
 import { fizmooConfigSchema } from "./_fizmoo.config.js";
@@ -26,7 +26,7 @@ export async function bootstrap() {
   const packageJsonPath = path.resolve(rootDir, "./package.json");
   const fizmooDir = path.resolve(rootDir, "./.fizmoo");
   const fizmooConfigPath = path.resolve(fizmooDir, "./config.json");
-  let commandsDir = path.resolve(fizmooDir, "./commands");
+  const commandsDir = path.resolve(fizmooDir, "./commands");
   let name = "";
   let description = "";
 
@@ -52,7 +52,7 @@ export async function bootstrap() {
   });
 
   // Ask and set the CLI commands dir
-  commandsDir = await input({
+  const commandsDirRel = await input({
     message: `Where would you like to store your commands? (This path should be relative to ${fizmooDir})`,
     default: "./commands",
   });
@@ -60,7 +60,7 @@ export async function bootstrap() {
   const configJson = fizmooConfigSchema.parse({
     name,
     description,
-    commandsDir,
+    commandsDir: commandsDirRel,
   });
   const fizmooConfigContent = JSON.stringify(configJson, null, 2);
 
@@ -70,6 +70,22 @@ export async function bootstrap() {
   );
   if (configRes.hasError) {
     throw configRes.error;
+  }
+
+  const myFirstCommandFilePath = path.resolve(commandsDir, "./start-here.ts");
+  const myFirstCommandFileContent = `import type { Meta } from "fizmoo";
+
+export const meta: Meta = {
+  name: "start-here",
+  description: "A standard command used to get started with Fizmoo",
+};
+`;
+  const firstCommandRes = await tryHandle(writeFileRecursive)(
+    myFirstCommandFilePath,
+    myFirstCommandFileContent
+  );
+  if (firstCommandRes.hasError) {
+    throw firstCommandRes.error;
   }
 
   return configRes.data;

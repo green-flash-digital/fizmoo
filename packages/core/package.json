@@ -12,7 +12,8 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./schema": "./dist/schema.json"
+    "./schema": "./dist/schema.json",
+    "./types": "./dist/_fizmoo.types.js"
   },
   "publishConfig": {
     "access": "public"

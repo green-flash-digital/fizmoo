@@ -4,7 +4,7 @@
   "description": "A sandbox to test out the functionality of fizmoo CLI",
   "type": "module",
   "scripts": {
-    "build": "yarn fizmoo build --debug",
+    "build": "yarn fizmoo build",
     "dev": "yarn fizmoo dev --debug"
   },
   "repository": {

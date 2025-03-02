@@ -4,10 +4,15 @@
   "description": "Effortlessly create 100% type-safe, self-documenting Node.js CLIs by simply adding files to your file system.",
   "type": "module",
   "sideEffects": false,
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "bin": "./bin/index.js",
   "scripts": {
+    "build": "yarn lib:build & yarn cli:build",
     "cli:build": "yarn tsx ./scripts/build-fizmoo-cli-with-fizmoo.ts",
-    "cli:dev": "yarn tsx ./scripts/dev-fizmoo-cli-with-fizmoo.ts"
+    "cli:dev": "yarn lib:build && yarn tsx ./scripts/dev-fizmoo-cli-with-fizmoo.ts",
+    "lib:build": "yarn tsc --project ./tsconfig.build.json"
   },
   "repository": {
     "type": "git",

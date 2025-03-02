@@ -3,7 +3,7 @@ import {
   BuildOptions,
   Plugin as EsbuildPlugin,
 } from "esbuild";
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { FizmooCommands } from "./FizmooCommands.js";
 import { DotDir, DotDirResponse } from "dotdir";
 import { tryHandle } from "ts-jolt/isomorphic";
@@ -69,7 +69,7 @@ export async function createFizmoo(options: {
 
   // Recursively attempt to create the fizmoo instance again. This should only
   // be called once since we're assuming that the configuration was written successfully
-  createFizmoo(options);
+  return createFizmoo(options);
 }
 
 // Intake the parsed options
@@ -215,6 +215,31 @@ try {
     if (entryRes.hasError) throw res.error;
   }
 
+  // TODO:
+  async createCommand() {}
+
+  async checkForCommands() {
+    try {
+      const dirents = await readdir(this.dirs.commandsDir, {
+        withFileTypes: true,
+        recursive: true,
+      });
+      const numOfCommand = dirents.reduce((accum, dirent) => {
+        if (dirent.isFile() && !dirent.name.startsWith("_")) {
+          return accum + 1;
+        }
+        return accum;
+      }, 0);
+      if (numOfCommand === 0) {
+        LOG.debug(
+          "No command files exist. Please create a command file to get started."
+        );
+      }
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  }
+
   /**
    * Built in method that will build the manifest outright
    * using the this.buildConfig
@@ -235,13 +260,21 @@ try {
    * using the this.buildConfig
    */
   async dev() {
+    LOG.info(`Starting the fizmoo development server...`);
+
+    try {
+      await this.checkForCommands();
+    } catch (error) {
+      return LOG.fatal(new Error(String(error)));
+    }
+
     try {
       this._isInDevMode = true;
       const context = await esbuild.context(this.buildConfig);
       await context.watch();
     } catch (error) {
       this._isInDevMode = false;
-      throw new Error(String(error));
+      LOG.fatal(new Error(String(error)));
     }
   }
 }

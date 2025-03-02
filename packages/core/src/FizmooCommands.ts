@@ -13,6 +13,8 @@ import { writeFile } from "node:fs/promises";
 import { printAsBullets } from "isoscribe";
 import pc from "picocolors";
 import { fizmooConstants } from "./_fizmoo.utils.public.js";
+import { build } from "esbuild";
+import { TempFile } from "ts-jolt/node";
 
 type MalformedCommandMode =
   | { type: "CLI_NAME_CONFLICT" }
@@ -109,8 +111,8 @@ export class FizmooCommands {
     const commandRelPath = this.getCommandRelPath(filePath);
     const commandId = this.getCommandId(commandRelPath);
     const commandParents = this.getCommandParents(commandId);
-    const commandOutFile = this.getCommandOutFile(commandRelPath);
-    const commandData = await this.getCommandData(filePath);
+    const commandOutFile = this._getCommandOutFile(commandRelPath);
+    const commandData = await this._getCommandData(filePath);
 
     if (commandId === this.rootCommandId) {
       this._addMalformedCommandError(filePath, { type: "CLI_NAME_CONFLICT" });
@@ -157,24 +159,30 @@ export class FizmooCommands {
     return result;
   }
 
-  private getCommandOutFile(filePath: string) {
+  private _getCommandOutFile(filePath: string) {
     return this.replaceExt("./commands/".concat(filePath), ".js");
   }
 
-  private async importCommandModule(commandPath: string) {
-    async function importModule() {
-      try {
-        const cmdModule = (await import(
-          `${commandPath}?q=${new Date().toISOString()}`
-        )) as Command;
-        return cmdModule;
-      } catch (error) {
-        // LOG.error(`Error when trying to import the command module at ${cmdPath}`);
-        throw new Error(String(error));
-      }
+  private async _importCommandModule(commandPath: string) {
+    async function transpileCommandFile() {
+      LOG.debug("Transpiling command file to parse", commandPath);
+      const result = await build({
+        entryPoints: [commandPath],
+        tsconfigRaw: JSON.stringify("ts-jolt/tsconfig/library"),
+        write: false,
+      });
+      const outputFile = result.outputFiles[0];
+      const outputFileContents = Buffer.from(outputFile.contents).toString(
+        "utf-8"
+      );
+      const tempFile = new TempFile();
+      const filePath = await tempFile.create(outputFileContents, "mjs");
+      const configModule = await import(`file://${filePath}`);
+      tempFile.cleanup();
+      return configModule as Command;
     }
 
-    const res = await tryHandle(importModule)();
+    const res = await tryHandle(transpileCommandFile)();
     if (res.hasError) {
       throw new Error(
         `Error when attempting to import the command during parsing: ${res.error.message}`
@@ -183,10 +191,10 @@ export class FizmooCommands {
     return res.data;
   }
 
-  private async getCommandData(
+  private async _getCommandData(
     filePath: string
   ): Promise<FizmooManifestEntryData> {
-    const module = await this.importCommandModule(filePath);
+    const module = await this._importCommandModule(filePath);
 
     return {
       name: module.meta?.name ?? "",

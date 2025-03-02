@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.fizmoo.greenflash.digital",
-  "name": "@fizmoo/cli-sandbox",
+  "name": "veal",
   "description": "A sandbox to test out the functionality of fizmoo CLI",
   "version": "0.0.1",
   "commandsDir": "./commands"
