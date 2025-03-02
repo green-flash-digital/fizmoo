@@ -180,6 +180,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fizmoo/cli-sandbox@workspace:packages/cli-sandbox":
+  version: 0.0.0-use.local
+  resolution: "@fizmoo/cli-sandbox@workspace:packages/cli-sandbox"
+  dependencies:
+    fizmoo: "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@fizmoo/core@workspace:^, @fizmoo/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@fizmoo/core@workspace:packages/core"
@@ -391,6 +399,23 @@ __metadata:
   checksum: 10c0/a1a3f914156960902f46f7f56bc62effc6c94e84b2cae157a526b1c1f74b677a47ec602bf68a61abfa2b42d15b7c5651c6dbe72a43af720bc588dff885b10f95
   languageName: node
   linkType: hard
+
+"core-sandbox@workspace:packages/core-sandbox":
+  version: 0.0.0-use.local
+  resolution: "core-sandbox@workspace:packages/core-sandbox"
+  dependencies:
+    "@fizmoo/core": "workspace:^"
+    "@fizmoo/runtime": "workspace:^"
+    "@types/node": "npm:^22.13.5"
+    fizmoo: "workspace:^"
+    isoscribe: "npm:^0.1.4"
+    ts-jolt: "npm:^0.2.1"
+    tsx: "npm:^4.19.3"
+    typescript: "npm:^5.7.3"
+  bin:
+    core-sandbox: ./bin/index.js
+  languageName: unknown
+  linkType: soft
 
 "cross-spawn@npm:^7.0.0":
   version: 7.0.6
@@ -1011,23 +1036,6 @@ __metadata:
   checksum: 10c0/7e3c8b2e88a1841c9671094bbaeebd94448111dd90a81a1f606f3f67708a6ec57763b3b47f06da09fc6054193e0e6709e77325415dc8422b04497a8070fa02d4
   languageName: node
   linkType: hard
-
-"sandbox@workspace:packages/sandbox":
-  version: 0.0.0-use.local
-  resolution: "sandbox@workspace:packages/sandbox"
-  dependencies:
-    "@fizmoo/core": "workspace:^"
-    "@fizmoo/runtime": "workspace:^"
-    "@types/node": "npm:^22.13.5"
-    fizmoo: "workspace:^"
-    isoscribe: "npm:^0.1.4"
-    ts-jolt: "npm:^0.2.1"
-    tsx: "npm:^4.19.3"
-    typescript: "npm:^5.7.3"
-  bin:
-    sandbox: ./bin/index.js
-  languageName: unknown
-  linkType: soft
 
 "semver@npm:^7.3.5":
   version: 7.7.1

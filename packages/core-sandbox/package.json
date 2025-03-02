@@ -1,7 +1,7 @@
 {
-  "name": "sandbox",
+  "name": "core-sandbox",
   "version": "1.0.0",
-  "description": "A sandbox to test out the functionality of Fizmoo",
+  "description": "A sandbox to test out the functionality of @fizmoo/core package",
   "type": "module",
   "private": true,
   "author": "Drew DeCarme (drew@greenflash.digital)",

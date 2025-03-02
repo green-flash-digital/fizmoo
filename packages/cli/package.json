@@ -6,7 +6,8 @@
   "sideEffects": false,
   "bin": "./bin/index.js",
   "scripts": {
-    "cli:build": "yarn tsx ./scripts/build-fizmoo-cli-with-fizmoo.ts"
+    "cli:build": "yarn tsx ./scripts/build-fizmoo-cli-with-fizmoo.ts",
+    "cli:dev": "yarn tsx ./scripts/dev-fizmoo-cli-with-fizmoo.ts"
   },
   "repository": {
     "type": "git",

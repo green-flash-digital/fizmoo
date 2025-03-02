@@ -7,8 +7,9 @@ import {
 import { buildOptionsSchema, LOG, validateOptions } from "./_utils/index.js";
 
 export const meta: Meta = {
-  name: "build",
-  description: "test description",
+  name: "dev",
+  description:
+    "Start the fizmoo framework development server. Changes will trigger a rebuild",
 };
 
 export const options = defineOptions({
@@ -26,6 +27,6 @@ export const action: Action<never, typeof options> = async ({ options }) => {
   });
   LOG.logLevel = opts.logLevel;
 
-  const fizmoo = await createFizmoo({ logLevel: "trace" });
-  await fizmoo.build();
+  const fizmoo = await createFizmoo({ logLevel: opts.logLevel });
+  await fizmoo.dev();
 };

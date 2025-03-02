@@ -36,15 +36,8 @@ export class RuntimeError {
     this._cliName = cliName;
   }
 
-  //   private _warn(error: any) {
-  //     console.error(`\x1b[93m${String(error)}\x1b[0m`);
-  //   }
-
   private _brightRed(msg: string) {
     return `\x1b[91m${msg}\x1b[0m`;
-  }
-  private _bold(msg: any) {
-    return `\x1b[1m${msg}\x1b[0m`;
   }
 
   log(error: Error) {

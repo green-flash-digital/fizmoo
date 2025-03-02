@@ -14,7 +14,7 @@
     "url": "https://github.com/green-flash-digital/fizmoo/issues"
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.7.0",
   "workspaces": {
     "packages": [
       "./packages/*"

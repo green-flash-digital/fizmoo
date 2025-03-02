@@ -1,5 +1,5 @@
 import {
-  build as esbuild,
+  default as esbuild,
   BuildOptions,
   Plugin as EsbuildPlugin,
 } from "esbuild";
@@ -38,10 +38,14 @@ export async function createFizmoo(options: {
 
 // Intake the parsed options
 export class Fizmoo extends FizmooCommands {
+  private _isInDevMode: boolean;
+
   constructor(args: DotDirResponse<FizmooConfig>) {
     super(args);
     this.init();
     this.build = this.build.bind(this);
+    this.dev = this.dev.bind(this);
+    this._isInDevMode = false;
   }
 
   get buildConfig(): BuildOptions {
@@ -58,14 +62,15 @@ export class Fizmoo extends FizmooCommands {
       entryPoints: this.entryPoints,
       outdir: this.dirs.outDir,
       plugins: [
-        this.pluginProcessFilesAndCommands(),
-        this.pluginEnrichPackageJSON(),
-        this.pluginValidateAndBuildManifest(),
-      ],
+        this._pluginWatchLogger(),
+        this._pluginProcessFilesAndCommands(),
+        this._pluginEnrichPackageJSON(),
+        this._pluginValidateAndBuildManifest(),
+      ].filter((plugin) => !!plugin),
     };
   }
 
-  private pluginProcessFilesAndCommands(): EsbuildPlugin {
+  private _pluginProcessFilesAndCommands(): EsbuildPlugin {
     return {
       name: "esbuild-plugin-buttery-commands-parse",
       setup: (build) => {
@@ -78,7 +83,7 @@ export class Fizmoo extends FizmooCommands {
     };
   }
 
-  private pluginEnrichPackageJSON(): EsbuildPlugin {
+  private _pluginEnrichPackageJSON(): EsbuildPlugin {
     return {
       name: "esbuild-plugin-buttery-commands-enrich-pkgjson",
       setup: (build) => {
@@ -112,12 +117,35 @@ export class Fizmoo extends FizmooCommands {
     };
   }
 
-  private pluginValidateAndBuildManifest(): EsbuildPlugin {
+  private _pluginValidateAndBuildManifest(): EsbuildPlugin {
     return {
       name: "esbuild-plugin-buttery-commands-manifest",
       setup: (build) => {
         build.onEnd(async () => {
           await this.buildManifest();
+        });
+      },
+    };
+  }
+
+  private _pluginWatchLogger(): EsbuildPlugin | undefined {
+    if (!this._isInDevMode) return undefined;
+
+    let isWatching = false; // Track if watch mode is active
+
+    return {
+      name: "watch-logger",
+      setup(build) {
+        build.onEnd((result) => {
+          if (!isWatching && result.errors.length === 0) {
+            isWatching = true; // Set to true after first successful build
+            LOG.watch("Listening for changes");
+            return;
+          }
+
+          if (isWatching) {
+            LOG.debug(`Rebuilding`);
+          }
         });
       },
     };
@@ -156,10 +184,27 @@ try {
    * using the this.buildConfig
    */
   async build() {
+    LOG.info(`Building "${this.config.name}" CLI...`);
     try {
-      const res = await esbuild(this.buildConfig);
+      const res = await esbuild.build(this.buildConfig);
+      LOG.success(`Done!`);
       return res;
     } catch (error) {
+      LOG.fatal(new Error(String(error)));
+    }
+  }
+
+  /**
+   * Built in method that will build the manifest outright
+   * using the this.buildConfig
+   */
+  async dev() {
+    try {
+      this._isInDevMode = true;
+      const context = await esbuild.context(this.buildConfig);
+      await context.watch();
+    } catch (error) {
+      this._isInDevMode = false;
       throw new Error(String(error));
     }
   }

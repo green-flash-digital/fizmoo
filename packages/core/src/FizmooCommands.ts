@@ -214,6 +214,7 @@ export class FizmooCommands {
    * Writes the manifest file to the bin directory
    */
   private async writeManifestToDisk() {
+    LOG.checkpointStart("Manifest:writing");
     const manifestPath = path.resolve(this.dirs.binDir, "fizmoo.manifest.json");
     const manifestContent = JSON.stringify(
       Object.fromEntries(this.manifest.entries()),
@@ -222,6 +223,7 @@ export class FizmooCommands {
     );
     const res = await tryHandle(writeFile)(manifestPath, manifestContent);
     if (res.hasError) throw LOG.fatal(res.error);
+    LOG.checkpointEnd();
   }
 
   /**

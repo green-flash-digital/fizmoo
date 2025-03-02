@@ -19,26 +19,31 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/cli"\
     },\
     {\
+      "name": "@fizmoo/cli-sandbox",\
+      "reference": "workspace:packages/cli-sandbox"\
+    },\
+    {\
       "name": "@fizmoo/core",\
       "reference": "workspace:packages/core"\
     },\
     {\
-      "name": "@fizmoo/runtime",\
-      "reference": "workspace:packages/runtime"\
+      "name": "core-sandbox",\
+      "reference": "workspace:packages/core-sandbox"\
     },\
     {\
-      "name": "sandbox",\
-      "reference": "workspace:packages/sandbox"\
+      "name": "@fizmoo/runtime",\
+      "reference": "workspace:packages/runtime"\
     }\
   ],\
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
+    ["@fizmoo/cli-sandbox", ["workspace:packages/cli-sandbox"]],\
     ["@fizmoo/core", ["workspace:packages/core"]],\
     ["@fizmoo/runtime", ["workspace:packages/runtime"]],\
     ["@gfdigital/fizmoo", ["workspace:."]],\
-    ["fizmoo", ["workspace:packages/cli"]],\
-    ["sandbox", ["workspace:packages/sandbox"]]\
+    ["core-sandbox", ["workspace:packages/core-sandbox"]],\
+    ["fizmoo", ["workspace:packages/cli"]]\
   ],\
   "fallbackPool": [\
   ],\
@@ -275,6 +280,16 @@ const RAW_RUNTIME_STATE =
           ["@esbuild/win32-x64", "npm:0.25.0"]\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@fizmoo/cli-sandbox", [\
+      ["workspace:packages/cli-sandbox", {\
+        "packageLocation": "./packages/cli-sandbox/",\
+        "packageDependencies": [\
+          ["@fizmoo/cli-sandbox", "workspace:packages/cli-sandbox"],\
+          ["fizmoo", "workspace:packages/cli"]\
+        ],\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["@fizmoo/core", [\
@@ -527,6 +542,23 @@ const RAW_RUNTIME_STATE =
           ["color-name", "npm:1.1.4"]\
         ],\
         "linkType": "HARD"\
+      }]\
+    ]],\
+    ["core-sandbox", [\
+      ["workspace:packages/core-sandbox", {\
+        "packageLocation": "./packages/core-sandbox/",\
+        "packageDependencies": [\
+          ["core-sandbox", "workspace:packages/core-sandbox"],\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["@fizmoo/runtime", "workspace:packages/runtime"],\
+          ["@types/node", "npm:22.13.5"],\
+          ["fizmoo", "workspace:packages/cli"],\
+          ["isoscribe", "npm:0.1.4"],\
+          ["ts-jolt", "npm:0.2.1"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+        ],\
+        "linkType": "SOFT"\
       }]\
     ]],\
     ["cross-spawn", [\
@@ -1156,23 +1188,6 @@ const RAW_RUNTIME_STATE =
           ["safer-buffer", "npm:2.1.2"]\
         ],\
         "linkType": "HARD"\
-      }]\
-    ]],\
-    ["sandbox", [\
-      ["workspace:packages/sandbox", {\
-        "packageLocation": "./packages/sandbox/",\
-        "packageDependencies": [\
-          ["sandbox", "workspace:packages/sandbox"],\
-          ["@fizmoo/core", "workspace:packages/core"],\
-          ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["@types/node", "npm:22.13.5"],\
-          ["fizmoo", "workspace:packages/cli"],\
-          ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.1"],\
-          ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
-        ],\
-        "linkType": "SOFT"\
       }]\
     ]],\
     ["semver", [\
@@ -1876,7 +1891,7 @@ async function copyImpl(prelayout, postlayout, destinationFs, destination, sourc
 async function maybeLStat(baseFs, p) {
   try {
     return await baseFs.lstatPromise(p);
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -2135,7 +2150,7 @@ class CustomStatWatcher extends events.EventEmitter {
   stat() {
     try {
       return this.fakeFs.statSync(this.path, { bigint: this.bigint });
-    } catch (error) {
+    } catch {
       const statInstance = this.bigint ? new BigIntStatsEntry() : new StatEntry();
       return clearStats(statInstance);
     }
@@ -2461,7 +2476,7 @@ class FakeFS {
     let current = Buffer.alloc(0);
     try {
       current = await this.readFilePromise(p);
-    } catch (error) {
+    } catch {
     }
     if (Buffer.compare(current, content) === 0)
       return;
@@ -2471,7 +2486,7 @@ class FakeFS {
     let current = ``;
     try {
       current = await this.readFilePromise(p, `utf8`);
-    } catch (error) {
+    } catch {
     }
     const normalizedContent = automaticNewlines ? normalizeLineEndings(current, content) : content;
     if (current === normalizedContent)
@@ -2489,7 +2504,7 @@ class FakeFS {
     let current = Buffer.alloc(0);
     try {
       current = this.readFileSync(p);
-    } catch (error) {
+    } catch {
     }
     if (Buffer.compare(current, content) === 0)
       return;
@@ -2499,7 +2514,7 @@ class FakeFS {
     let current = ``;
     try {
       current = this.readFileSync(p, `utf8`);
-    } catch (error) {
+    } catch {
     }
     const normalizedContent = automaticNewlines ? normalizeLineEndings(current, content) : content;
     if (current === normalizedContent)
@@ -2539,13 +2554,13 @@ class FakeFS {
       let pid;
       try {
         [pid] = await this.readJsonPromise(lockPath);
-      } catch (error) {
+      } catch {
         return Date.now() - startTime < 500;
       }
       try {
         process.kill(pid, 0);
         return true;
-      } catch (error) {
+      } catch {
         return false;
       }
     };
@@ -2558,7 +2573,7 @@ class FakeFS {
             try {
               await this.unlinkPromise(lockPath);
               continue;
-            } catch (error2) {
+            } catch {
             }
           }
           if (Date.now() - startTime < 60 * 1e3) {
@@ -2578,7 +2593,7 @@ class FakeFS {
       try {
         await this.closePromise(fd);
         await this.unlinkPromise(lockPath);
-      } catch (error) {
+      } catch {
       }
     }
   }
@@ -3728,7 +3743,7 @@ class MountFS extends BasePortableFakeFS {
       let content;
       try {
         content = await sourceFs.readFilePromise(sourceP2);
-      } catch (error) {
+      } catch {
         throw Object.assign(new Error(`EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`), { code: `EINVAL` });
       }
       await destFs.writeFilePromise(destP2, content);
@@ -3760,7 +3775,7 @@ class MountFS extends BasePortableFakeFS {
       let content;
       try {
         content = sourceFs.readFileSync(sourceP2);
-      } catch (error) {
+      } catch {
         throw Object.assign(new Error(`EINVAL: invalid argument, copyfile '${sourceP2}' -> '${destP2}'`), { code: `EINVAL` });
       }
       destFs.writeFileSync(destP2, content);
@@ -4675,7 +4690,7 @@ function patchFs(patchedFs, fakeFs) {
     setupFn(patchedFs, `existsSync`, (p) => {
       try {
         return fakeFs.existsSync(p);
-      } catch (error) {
+      } catch {
         return false;
       }
     });
@@ -6036,7 +6051,7 @@ class ZipFS extends BasePortableFakeFS {
     let resolvedP;
     try {
       resolvedP = this.resolveFilename(`stat '${p}'`, p, void 0, false);
-    } catch (error) {
+    } catch {
       return false;
     }
     if (resolvedP === void 0)
@@ -7077,7 +7092,7 @@ Require stack:
         } else {
           resolution = originalFindPath.call(require$$0.Module, request, [path], isMain);
         }
-      } catch (error) {
+      } catch {
         continue;
       }
       if (resolution) {
@@ -8160,7 +8175,7 @@ function makeApi(runtimeState, opts) {
     try {
       candidates.push(unqualifiedPath);
       stat = opts.fakeFs.statSync(unqualifiedPath);
-    } catch (error) {
+    } catch {
     }
     if (stat && !stat.isDirectory())
       return opts.fakeFs.realpathSync(unqualifiedPath);
@@ -8168,7 +8183,7 @@ function makeApi(runtimeState, opts) {
       let pkgJson;
       try {
         pkgJson = JSON.parse(opts.fakeFs.readFileSync(ppath.join(unqualifiedPath, Filename.manifest), `utf8`));
-      } catch (error) {
+      } catch {
       }
       let nextUnqualifiedPath;
       if (pkgJson && pkgJson.main)
