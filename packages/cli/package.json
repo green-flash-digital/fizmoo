@@ -26,14 +26,15 @@
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "dependencies": {
-    "@fizmoo/core": "workspace:^",
-    "isoscribe": "^0.1.4",
-    "ts-jolt": "^0.2.2",
-    "zod": "^3.24.2"
+    "@fizmoo/core": "workspace:*",
+    "@fizmoo/runtime": "workspace:*",
+    "isoscribe": "0.1.4",
+    "ts-jolt": "0.2.2",
+    "zod": "3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.8",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "@types/node": "22.13.8",
+    "tsx": "4.19.3",
+    "typescript": "5.8.2"
   }
 }

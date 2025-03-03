@@ -1,5 +1,5 @@
 {
-  "name": "core-sandbox",
+  "name": "@fizmoo/core-sandbox",
   "version": "1.0.0",
   "description": "A sandbox to test out the functionality of @fizmoo/core package",
   "type": "module",
@@ -11,15 +11,15 @@
     "build": "yarn tsx ./scripts/build-sandbox-cli-with-fizmoo.ts"
   },
   "devDependencies": {
-    "@fizmoo/core": "workspace:^",
-    "@types/node": "^22.13.9",
-    "fizmoo": "workspace:^",
-    "isoscribe": "^0.1.4",
-    "ts-jolt": "^0.2.2",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "@fizmoo/core": "workspace:*",
+    "@types/node": "22.13.9",
+    "fizmoo": "workspace:*",
+    "isoscribe": "0.1.4",
+    "ts-jolt": "0.2.2",
+    "tsx": "4.19.3",
+    "typescript": "5.8.2"
   },
   "dependencies": {
-    "@fizmoo/runtime": "workspace:^"
+    "@fizmoo/runtime": "workspace:*"
   }
 }

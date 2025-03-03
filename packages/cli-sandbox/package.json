@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A sandbox to test out the functionality of fizmoo CLI",
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "yarn fizmoo build",
     "dev": "yarn fizmoo dev --debug"
@@ -18,7 +19,7 @@
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "dependencies": {
-    "fizmoo": "workspace:^"
+    "fizmoo": "workspace:*"
   },
   "bin": "./bin/index.js"
 }

@@ -31,21 +31,21 @@
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "devDependencies": {
-    "@types/node": "^22.13.9",
-    "@types/picomatch": "^3.0.2",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2",
+    "@types/node": "22.13.9",
+    "@types/picomatch": "3.0.2",
+    "tsx": "4.19.3",
+    "typescript": "5.8.2",
     "wrangler": "3.111.0",
-    "zod-to-json-schema": "^3.24.3"
+    "zod-to-json-schema": "3.24.3"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.3.2",
-    "dotdir": "^0.3.1",
-    "esbuild": "^0.25.0",
-    "isoscribe": "^0.1.4",
-    "picocolors": "^1.1.1",
-    "picomatch": "^4.0.2",
-    "ts-jolt": "^0.2.2",
-    "zod": "^3.24.2"
+    "@inquirer/prompts": "7.3.2",
+    "dotdir": "0.3.1",
+    "esbuild": "0.25.0",
+    "isoscribe": "0.1.4",
+    "picocolors": "1.1.1",
+    "picomatch": "4.0.2",
+    "ts-jolt": "0.2.2",
+    "zod": "3.24.2"
   }
 }
