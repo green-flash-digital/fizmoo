@@ -1,0 +1,51 @@
+{
+  "name": "@fizmoo/core",
+  "version": "0.0.1",
+  "description": "Effortlessly create 100% type-safe, self-documenting Node.js CLIs by simply adding files to your file system.",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "lib:build": "yarn tsc --project ./tsconfig.build.json",
+    "build": "yarn schema:build & yarn lib:build",
+    "dev": "yarn build:lib --watch",
+    "schema:build": "yarn tsx ./scripts/create-json-schema.ts",
+    "schema:deploy": "yarn wrangler r2 object put json-schemas/fizmoo.json --file ./dist/schema.json"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./schema": "./dist/schema.json",
+    "./types": "./dist/_fizmoo.types.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/green-flash-digital/fizmoo.git",
+    "directory": "packages/fizmoo"
+  },
+  "author": "Drew DeCarme (drew@greenflash.digital)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/green-flash-digital/fizmoo/issues"
+  },
+  "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
+  "devDependencies": {
+    "@types/node": "22.13.9",
+    "@types/picomatch": "3.0.2",
+    "tsx": "4.19.3",
+    "typescript": "5.8.2",
+    "wrangler": "3.111.0",
+    "zod-to-json-schema": "3.24.3"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "7.3.2",
+    "dotdir": "0.3.1",
+    "esbuild": "0.25.0",
+    "isoscribe": "0.1.4",
+    "picocolors": "1.1.1",
+    "picomatch": "4.0.2",
+    "ts-jolt": "0.2.2",
+    "zod": "3.24.2"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "../../core/dist/schema.json",
+  "name": "fizmoo",
+  "version": "v0.0.1",
+  "description": "Author, build, and run NodeJS CLIs using your file system"
+}

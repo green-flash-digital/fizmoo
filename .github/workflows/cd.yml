@@ -1,0 +1,49 @@
+name: CD - Build and Deploy
+
+on:
+  push:
+    branches:
+      - main # Triggers when a PR is merged into main
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Read Node.js Version
+        id: node_version
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+      - name: Enable Corepack # Ensures the correct version of yarn is used
+        run: corepack enable
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Authenticate NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.GREEN_FLASH_NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Project
+        run: yarn build
+
+        # TODO: Need to add a step in here to publish the json config
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GREEN_FLASH_NPM_TOKEN }}
