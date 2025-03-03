@@ -4,7 +4,7 @@ export const fizmooConfigSchema = z.object({
   $schema: z
     .string()
     .optional()
-    .default("https://schema.fizmoo.greenflash.digital"),
+    .default("https://schemas.greenflash.digital/fizmoo.json"),
   /**
    * The name of the CLI. This is also the name of
    * the execution string that will instantiate the

@@ -13,6 +13,9 @@
   "bugs": {
     "url": "https://github.com/green-flash-digital/fizmoo/issues"
   },
+  "scripts": {
+    "build": "turbo build"
+  },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "packageManager": "yarn@4.7.0",
   "workspaces": {
@@ -21,6 +24,7 @@
     ]
   },
   "devDependencies": {
+    "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   }
 }

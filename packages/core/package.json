@@ -5,10 +5,11 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "build:lib": "yarn tsc --project ./tsconfig.build.json",
-    "build:schema": "yarn tsx ./scripts/create-json-schema.ts",
-    "build": "yarn build:schema & yarn build:lib",
-    "dev": "yarn build:lib --watch"
+    "lib:build": "yarn tsc --project ./tsconfig.build.json",
+    "build": "yarn schema:build & yarn lib:build",
+    "dev": "yarn build:lib --watch",
+    "schema:build": "yarn tsx ./scripts/create-json-schema.ts",
+    "schema:deploy": "yarn wrangler r2 object put json-schemas/fizmoo.json --file ./dist/schema.json"
   },
   "exports": {
     ".": "./dist/index.js",
@@ -30,10 +31,11 @@
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "devDependencies": {
-    "@types/node": "^22.13.8",
+    "@types/node": "^22.13.9",
     "@types/picomatch": "^3.0.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
+    "wrangler": "3.111.0",
     "zod-to-json-schema": "^3.24.3"
   },
   "dependencies": {

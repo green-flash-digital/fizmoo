@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@fizmoo/core": "workspace:^",
-    "@types/node": "^22.13.8",
+    "@types/node": "^22.13.9",
     "fizmoo": "workspace:^",
     "isoscribe": "^0.1.4",
     "ts-jolt": "^0.2.2",
