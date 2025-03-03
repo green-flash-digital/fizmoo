@@ -27,7 +27,7 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/core"\
     },\
     {\
-      "name": "core-sandbox",\
+      "name": "@fizmoo/core-sandbox",\
       "reference": "workspace:packages/core-sandbox"\
     },\
     {\
@@ -40,9 +40,9 @@ const RAW_RUNTIME_STATE =
   "fallbackExclusionList": [\
     ["@fizmoo/cli-sandbox", ["workspace:packages/cli-sandbox"]],\
     ["@fizmoo/core", ["workspace:packages/core"]],\
+    ["@fizmoo/core-sandbox", ["workspace:packages/core-sandbox"]],\
     ["@fizmoo/runtime", ["workspace:packages/runtime"]],\
     ["@gfdigital/fizmoo", ["workspace:."]],\
-    ["core-sandbox", ["workspace:packages/core-sandbox"]],\
     ["fizmoo", ["workspace:packages/cli"]]\
   ],\
   "fallbackPool": [\
@@ -858,6 +858,23 @@ const RAW_RUNTIME_STATE =
           ["wrangler", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.111.0"],\
           ["zod", "npm:3.24.2"],\
           ["zod-to-json-schema", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.24.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@fizmoo/core-sandbox", [\
+      ["workspace:packages/core-sandbox", {\
+        "packageLocation": "./packages/core-sandbox/",\
+        "packageDependencies": [\
+          ["@fizmoo/core-sandbox", "workspace:packages/core-sandbox"],\
+          ["@fizmoo/core", "workspace:packages/core"],\
+          ["@fizmoo/runtime", "workspace:packages/runtime"],\
+          ["@types/node", "npm:22.13.9"],\
+          ["fizmoo", "workspace:packages/cli"],\
+          ["isoscribe", "npm:0.1.4"],\
+          ["ts-jolt", "npm:0.2.2"],\
+          ["tsx", "npm:4.19.3"],\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1857,23 +1874,6 @@ const RAW_RUNTIME_STATE =
           ["cookie", "npm:0.5.0"]\
         ],\
         "linkType": "HARD"\
-      }]\
-    ]],\
-    ["core-sandbox", [\
-      ["workspace:packages/core-sandbox", {\
-        "packageLocation": "./packages/core-sandbox/",\
-        "packageDependencies": [\
-          ["core-sandbox", "workspace:packages/core-sandbox"],\
-          ["@fizmoo/core", "workspace:packages/core"],\
-          ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["@types/node", "npm:22.13.9"],\
-          ["fizmoo", "workspace:packages/cli"],\
-          ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.2"],\
-          ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
-        ],\
-        "linkType": "SOFT"\
       }]\
     ]],\
     ["cross-spawn", [\

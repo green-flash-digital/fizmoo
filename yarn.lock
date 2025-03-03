@@ -677,6 +677,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@fizmoo/core-sandbox@workspace:packages/core-sandbox":
+  version: 0.0.0-use.local
+  resolution: "@fizmoo/core-sandbox@workspace:packages/core-sandbox"
+  dependencies:
+    "@fizmoo/core": "workspace:*"
+    "@fizmoo/runtime": "workspace:*"
+    "@types/node": "npm:22.13.9"
+    fizmoo: "workspace:*"
+    isoscribe: "npm:0.1.4"
+    ts-jolt: "npm:0.2.2"
+    tsx: "npm:4.19.3"
+    typescript: "npm:5.8.2"
+  bin:
+    core-sandbox: ./bin/index.js
+  languageName: unknown
+  linkType: soft
+
 "@fizmoo/core@workspace:*, @fizmoo/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@fizmoo/core@workspace:packages/core"
@@ -698,7 +715,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fizmoo/runtime@workspace:*, @fizmoo/runtime@workspace:^, @fizmoo/runtime@workspace:packages/runtime":
+"@fizmoo/runtime@workspace:*, @fizmoo/runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@fizmoo/runtime@workspace:packages/runtime"
   dependencies:
@@ -1523,23 +1540,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-sandbox@workspace:packages/core-sandbox":
-  version: 0.0.0-use.local
-  resolution: "core-sandbox@workspace:packages/core-sandbox"
-  dependencies:
-    "@fizmoo/core": "workspace:*"
-    "@fizmoo/runtime": "workspace:*"
-    "@types/node": "npm:22.13.9"
-    fizmoo: "workspace:*"
-    isoscribe: "npm:0.1.4"
-    ts-jolt: "npm:0.2.2"
-    tsx: "npm:4.19.3"
-    typescript: "npm:5.8.2"
-  bin:
-    core-sandbox: ./bin/index.js
-  languageName: unknown
-  linkType: soft
-
 "cross-spawn@npm:^7.0.5, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
@@ -1929,7 +1929,7 @@ __metadata:
   resolution: "fizmoo@workspace:packages/cli"
   dependencies:
     "@fizmoo/core": "workspace:*"
-    "@fizmoo/runtime": "workspace:^"
+    "@fizmoo/runtime": "workspace:*"
     "@types/node": "npm:22.13.8"
     isoscribe: "npm:0.1.4"
     ts-jolt: "npm:0.2.2"
