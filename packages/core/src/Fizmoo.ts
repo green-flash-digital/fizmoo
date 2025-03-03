@@ -215,9 +215,6 @@ try {
     if (entryRes.hasError) throw res.error;
   }
 
-  // TODO:
-  async createCommand() {}
-
   async checkForCommands() {
     try {
       const dirents = await readdir(this.dirs.commandsDir, {

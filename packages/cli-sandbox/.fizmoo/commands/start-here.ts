@@ -1,4 +1,4 @@
-import { type Meta } from "fizmoo";
+import type { Meta } from "fizmoo";
 
 export const meta: Meta = {
   name: "start-here",
