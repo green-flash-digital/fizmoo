@@ -14,7 +14,8 @@
     "url": "https://github.com/green-flash-digital/fizmoo/issues"
   },
   "scripts": {
-    "build": "turbo build"
+    "build": "turbo build",
+    "release": "yarn changeset publish"
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "packageManager": "yarn@4.7.0",

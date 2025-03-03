@@ -36,5 +36,14 @@ jobs:
       - name: Build Project
         run: yarn build
 
-      - name: Publish to NPM
-        run: npm publish
+        # TODO: Need to add a step in here to publish the json config
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GREEN_FLASH_NPM_TOKEN }}
