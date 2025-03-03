@@ -202,8 +202,7 @@ __metadata:
     isoscribe: "npm:^0.1.4"
     picocolors: "npm:^1.1.1"
     picomatch: "npm:^4.0.2"
-    ts-hot-import: "npm:^0.1.3"
-    ts-jolt: "npm:^0.2.1"
+    ts-jolt: "npm:^0.2.2"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
     zod: "npm:^3.24.2"
@@ -219,7 +218,7 @@ __metadata:
     "@types/node": "npm:^22.13.8"
     esbuild: "npm:^0.25.0"
     isoscribe: "npm:^0.1.4"
-    ts-jolt: "npm:^0.2.1"
+    ts-jolt: "npm:^0.2.2"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
   languageName: unknown
@@ -661,7 +660,7 @@ __metadata:
     "@types/node": "npm:^22.13.8"
     fizmoo: "workspace:^"
     isoscribe: "npm:^0.1.4"
-    ts-jolt: "npm:^0.2.1"
+    ts-jolt: "npm:^0.2.2"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
   bin:
@@ -858,7 +857,7 @@ __metadata:
     "@fizmoo/runtime": "workspace:^"
     "@types/node": "npm:^22.13.8"
     isoscribe: "npm:^0.1.4"
-    ts-jolt: "npm:^0.2.1"
+    ts-jolt: "npm:^0.2.2"
     tsx: "npm:^4.19.3"
     typescript: "npm:^5.8.2"
     zod: "npm:^3.24.2"
@@ -1459,16 +1458,6 @@ __metadata:
   dependencies:
     os-tmpdir: "npm:~1.0.2"
   checksum: 10c0/69863947b8c29cabad43fe0ce65cec5bb4b481d15d4b4b21e036b060b3edbf3bc7a5541de1bacb437bb3f7c4538f669752627fdf9b4aaf034cebd172ba373408
-  languageName: node
-  linkType: hard
-
-"ts-hot-import@npm:^0.1.3":
-  version: 0.1.4
-  resolution: "ts-hot-import@npm:0.1.4"
-  dependencies:
-    esbuild: "npm:^0.25.0"
-    ts-jolt: "npm:^0.2.2"
-  checksum: 10c0/245701f17705a83b2199cb0767fee5bf7e57d5e5e12c42193afcd031dd5bc5ea755ed09af1bfeeb922a6f37381415dab84eab3f2f64980896802b8ba948bed20
   languageName: node
   linkType: hard
 

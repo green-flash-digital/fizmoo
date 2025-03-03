@@ -2,18 +2,13 @@ import { DotDirResponse } from "dotdir";
 import path from "node:path";
 import picomatch from "picomatch";
 import { exhaustiveMatchGuard, tryHandle } from "ts-jolt/isomorphic";
-import {
-  Command,
-  FizmooManifestEntry,
-  FizmooManifestEntryData,
-} from "./_fizmoo.types.js";
+import { FizmooManifestEntry } from "./_fizmoo.types.js";
 import { LOG } from "./_fizmoo.utils.js";
 import { FizmooConfig } from "./_fizmoo.config.js";
 import { writeFile } from "node:fs/promises";
 import { printAsBullets } from "isoscribe";
 import pc from "picocolors";
 import { fizmooConstants } from "./_fizmoo.utils.public.js";
-import { hotImport } from "ts-hot-import";
 
 type MalformedCommandMode =
   | { type: "CLI_NAME_CONFLICT" }
@@ -111,7 +106,6 @@ export class FizmooCommands {
     const commandId = this.getCommandId(commandRelPath);
     const commandParents = this.getCommandParents(commandId);
     const commandOutFile = this._getCommandOutFile(commandRelPath);
-    const commandData = await this._getCommandData(filePath);
 
     if (commandId === this.rootCommandId) {
       this._addMalformedCommandError(filePath, { type: "CLI_NAME_CONFLICT" });
@@ -122,10 +116,18 @@ export class FizmooCommands {
       src: path.relative(import.meta.dirname, filePath),
       file: commandOutFile,
       parents: commandParents,
-      subCommands: null, // this will be enriched after the full manifest is built
-      data: commandData,
+      // The below properties will be set after the full manifest is created
+      subCommands: null,
+      properties: {
+        name: "",
+        description: "",
+        args: undefined,
+        options: undefined,
+        hasAction: false,
+        help: "",
+      },
     });
-    LOG.trace("Record", this.manifest.get(commandId));
+    // LOG.trace("Record", this.manifest.get(commandId));
     LOG.debug(`Adding "${commandId}" to manifest... done.`);
   }
 
@@ -162,38 +164,57 @@ export class FizmooCommands {
     return this.replaceExt("./commands/".concat(filePath), ".js");
   }
 
-  private async _importCommandModule(commandPath: string) {
-    const res = await tryHandle(hotImport<Command>)(commandPath);
-    if (res.hasError) {
-      throw new Error(
-        `Error when attempting to import the command during parsing: ${res.error.message}`
-      );
-    }
-    return res.data;
-  }
+  // private async _importCommandModule(commandPath: string) {
+  //   // TODO: Turn into a package ts-hot-import
+  //   async function transpileCommandFile() {
+  //     LOG.debug("Transpiling command file to parse", commandPath);
+  //     const result = await build({
+  //       entryPoints: [commandPath],
+  //       tsconfigRaw: JSON.stringify("ts-jolt/tsconfig/library"),
+  //       write: false,
+  //     });
+  //     const outputFile = result.outputFiles[0];
+  //     const outputFileContents = Buffer.from(outputFile.contents).toString(
+  //       "utf-8"
+  //     );
+  //     const tempFile = new TempFile();
+  //     const filePath = await tempFile.create(outputFileContents, "mjs");
+  //     const configModule = await import(`file://${filePath}`);
+  //     tempFile.cleanup();
+  //     return configModule as Command;
+  //   }
 
-  private async _getCommandData(
-    filePath: string
-  ): Promise<FizmooManifestEntryData> {
-    const module = await this._importCommandModule(filePath);
+  //   const res = await tryHandle(transpileCommandFile)();
+  //   if (res.hasError) {
+  //     throw new Error(
+  //       `Error when attempting to import the command during parsing: ${res.error.message}`
+  //     );
+  //   }
+  //   return res.data;
+  // }
 
-    return {
-      name: module.meta?.name ?? "",
-      description: module.meta?.description ?? "",
-      args: module.args,
-      options: {
-        help: {
-          type: "boolean",
-          required: false,
-          alias: "h",
-          description: "Display the help menu",
-        },
-        ...module.options,
-      },
-      hasAction: !!module.action,
-      help: "",
-    };
-  }
+  // private async _getCommandData(
+  //   filePath: string
+  // ): Promise<FizmooManifestEntryData> {
+  //   const module = await this._importCommandModule(filePath);
+
+  // return {
+  //   name: module.meta?.name ?? "",
+  //   description: module.meta?.description ?? "",
+  //   args: module.args,
+  //   options: {
+  //     help: {
+  //       type: "boolean",
+  //       required: false,
+  //       alias: "h",
+  //       description: "Display the help menu",
+  //     },
+  //     ...module.options,
+  //   },
+  //   hasAction: !!module.action,
+  //   help: "",
+  // };
+  // }
 
   private replaceExt(path: string, replacement: string) {
     return path.replace(/\.(ts|js|mjs)$/, replacement);
@@ -218,7 +239,7 @@ export class FizmooCommands {
   /**
    * Validates each entry in the manifest to ensure it's well formed
    */
-  private validateManifest() {
+  private _validateManifest() {
     LOG.checkpointStart("Manifest:validate");
     const allCommandIds = [...this.manifest.keys()];
 
@@ -233,13 +254,13 @@ export class FizmooCommands {
       }
 
       // Validate Meta
-      if (!command.data.name) {
+      if (!command.properties.name) {
         this._addMalformedCommandError(command.src, {
           type: "MISSING_ATTRIBUTE",
           description: "Missing a `meta.name`.",
         });
       }
-      if (!command.data.description) {
+      if (!command.properties.description) {
         this._addMalformedCommandError(command.src, {
           type: "MISSING_ATTRIBUTE",
           description: "Missing a `meta.description`.",
@@ -256,7 +277,8 @@ export class FizmooCommands {
         }
         return accum;
       }, false);
-      const hasAction = !command.data.hasAction;
+      const hasAction = !command.properties.hasAction;
+
       if (hasSubCommands && !hasAction) {
         // TODO: This isn't working
         this._addMalformedCommandError(command.src, {
@@ -269,7 +291,7 @@ export class FizmooCommands {
       LOG.debug(`Validating "${commandId}"... done.`);
     }
 
-    this.printErrorReport();
+    this._printErrorReport();
 
     LOG.checkpointEnd();
   }
@@ -302,7 +324,7 @@ export class FizmooCommands {
     );
   }
 
-  private printErrorReport() {
+  private _printErrorReport() {
     const hasMissingFiles = this._errorReport.MISSING_COMMANDS.size > 0;
     const hasInvalidCommands = this._errorReport.MALFORMED_COMMAND.size > 0;
     let report = "";
@@ -343,6 +365,27 @@ ${report}
     return pc.bold(pc.underline(title));
   }
 
+  private _enrichCommandHelp(
+    commandId: string,
+    commandEntry: FizmooManifestEntry
+  ): FizmooManifestEntry {
+    // Enrich the entry.menu
+    LOG.debug(`"${commandId}" - Building help menu...`);
+    const helpMenu: string[] = [];
+    this._enrichCommandHelpUsage(commandId, commandEntry, helpMenu);
+    this._enrichCommandHelpDescription(commandEntry, helpMenu);
+    this._enrichCommandHelpSubCommands(commandEntry, helpMenu);
+    this._enrichCommandHelpArgs(commandEntry, helpMenu);
+    this._enrichCommandHelpOptions(commandEntry, helpMenu);
+    const help = helpMenu.join("\n");
+    commandEntry = {
+      ...commandEntry,
+      properties: { ...commandEntry.properties, help },
+    };
+    LOG.debug(`"${commandId}" - Building help menu... done`);
+    return commandEntry;
+  }
+
   /**
    *
    * Adds the usage section (how to use and call the) CLI command
@@ -350,13 +393,11 @@ ${report}
    * will be displayed via their properties
    * all other optional args wil be displayed with args or --options
    *
-   * KEY
-   * <> = required
-   * [] = optional
+   * KEY | <> = required | [] = optional
    */
-  private setHelpCommandUsage(
+  private _enrichCommandHelpUsage(
     commandId: string,
-    { subCommands, data: { args, options } }: FizmooManifestEntry,
+    { subCommands, properties: { args, options } }: FizmooManifestEntry,
     helpMenu: string[]
   ) {
     helpMenu.push(this.formatHelpCommandTitle("Usage:"));
@@ -390,8 +431,8 @@ ${report}
   /**
    * Adds the command description to the help menu
    */
-  private setHelpCommandDescription(
-    { data: { description } }: FizmooManifestEntry,
+  private _enrichCommandHelpDescription(
+    { properties: { description } }: FizmooManifestEntry,
     helpMenu: string[]
   ) {
     helpMenu.push(this.formatHelpCommandTitle("Description:"));
@@ -405,7 +446,7 @@ ${report}
    * the sub command names is found so all of the sub command
    * descriptions start at the same column in the help menu
    */
-  private setHelpCommandSubCommands(
+  private _enrichCommandHelpSubCommands(
     { subCommands }: FizmooManifestEntry,
     helpMenu: string[]
   ) {
@@ -416,7 +457,8 @@ ${report}
 
     // Get the max length of the names
     const subCmdNameMaxLength = subCmdsIds.reduce<number>((accum, subCmdId) => {
-      const length = (this.manifest.get(subCmdId)?.data.name ?? "").length;
+      const length = (this.manifest.get(subCmdId)?.properties.name ?? "")
+        .length;
       if (length > accum) return length;
       return accum;
     }, 0);
@@ -425,7 +467,7 @@ ${report}
     for (const subCommandId of subCmdsIds) {
       const subCommandEntry = this.manifest.get(subCommandId);
       if (!subCommandEntry) continue;
-      const { name, description } = subCommandEntry.data;
+      const { name, description } = subCommandEntry.properties;
       helpMenu.push(`  ${name.padEnd(subCmdNameMaxLength)}  ${description}`);
     }
 
@@ -437,8 +479,8 @@ ${report}
    * determines some values based upon those args and pushes
    * those formatted values onto the help menu
    */
-  private setHelpCommandArgs(
-    { data: { args } }: FizmooManifestEntry,
+  private _enrichCommandHelpArgs(
+    { properties: { args } }: FizmooManifestEntry,
     helpMenu: string[]
   ) {
     const argEntries = Object.entries(args ?? {});
@@ -518,8 +560,8 @@ ${report}
    * determines some values based upon those options and pushes
    * those formatted values onto the help menu
    */
-  private setHelpCommandOptions(
-    { data: { options } }: FizmooManifestEntry,
+  private _enrichCommandHelpOptions(
+    { properties: { options } }: FizmooManifestEntry,
     helpMenu: string[]
   ) {
     const optEntries = Object.entries(options ?? {});
@@ -556,21 +598,78 @@ ${report}
     helpMenu.push("");
   }
 
+  private _enrichCommandSubCommands(
+    commandId: string,
+    commandEntry: FizmooManifestEntry
+  ): FizmooManifestEntry {
+    LOG.debug(`"${commandId}" - Finding sub-commands...`);
+    const allCommandIds = [...this.manifest.keys()];
+    const commandLevel = this.getCmdSegments(commandId).length;
+    const subCommands = allCommandIds.filter((cmdId) => {
+      const cmdLevel = this.getCmdSegments(cmdId).length;
+
+      // If it's the root command, all cmd levels that are 1 are
+      // sub commands
+      if (commandId === this.rootCommandId) {
+        return cmdLevel === 1;
+      }
+
+      return cmdId.startsWith(commandId) && commandLevel + 1 === cmdLevel;
+    });
+    LOG.debug(`"${commandId}" - Finding sub-commands... done`);
+    return { ...commandEntry, subCommands };
+  }
+
+  private async _enrichCommandProperties(
+    commandId: string,
+    commandEntry: FizmooManifestEntry
+  ): Promise<FizmooManifestEntry> {
+    // Don't enrich the root since it has already been set
+    if (commandId === this.rootCommandId) return commandEntry;
+
+    LOG.debug(`Importing "${commandId}" to set command properties...`);
+    LOG.trace("Path relative to bin directory", commandEntry.file);
+    const fullPath = path.resolve(this.dirs.binDir, commandEntry.file);
+    LOG.trace("FQ path", fullPath);
+    const module = await import(fullPath.concat(`?t=${new Date().getTime()}`));
+
+    LOG.debug(`Importing "${commandId}" to set command properties... done.`);
+
+    return {
+      ...commandEntry,
+      properties: {
+        name: module.meta?.name ?? "",
+        description: module.meta?.description ?? "",
+        args: module.args,
+        options: {
+          help: {
+            type: "boolean",
+            required: false,
+            alias: "h",
+            description: "Display the help menu",
+          },
+          ...module.options,
+        },
+        hasAction: !!module.action,
+        help: "",
+      },
+    };
+  }
+
   /**
    * Loops through all of the valid entries of the manifest and
    * adds more context to some of the static commands
    */
-  private enrichManifest() {
+  private async _enrichManifest() {
     LOG.checkpointStart("Enriching manifest");
-    const allCommandIds = [...this.manifest.keys()];
 
-    // Add the root command
+    // Add the command root
     this.manifest.set(this.rootCommandId, {
       src: "",
       file: "",
       parents: [],
       subCommands: [],
-      data: {
+      properties: {
         name: this.config.name,
         description: this.config.description,
         options: undefined,
@@ -580,48 +679,16 @@ ${report}
       },
     });
 
-    for (const [commandId, commandEntry] of this.manifest.entries()) {
-      LOG.debug(`"${commandId}" - Finding sub-commands...`);
-      // We're keeping track of this so when we update a command,
-      // we can set the updates to this variable to pass to
-      // another section that needs the progressively updated command
-      let enrichedCommandEntry = commandEntry;
+    for await (const [cmdId, cmd] of this.manifest.entries()) {
+      const withSubCmds = this._enrichCommandSubCommands(cmdId, cmd);
+      const withProperties = await this._enrichCommandProperties(
+        cmdId,
+        withSubCmds
+      );
+      const withHelp = this._enrichCommandHelp(cmdId, withProperties);
 
-      // Enrich the entry.subCommands
-      const commandLevel = this.getCmdSegments(commandId).length;
-      const subCommands = allCommandIds.filter((cmdId) => {
-        const cmdLevel = this.getCmdSegments(cmdId).length;
-
-        // If it's the root command, all cmd levels that are 1 are
-        // sub commands
-        if (commandId === this.rootCommandId) {
-          return cmdLevel === 1;
-        }
-
-        return cmdId.startsWith(commandId) && commandLevel + 1 === cmdLevel;
-      });
-      // we do this before we set the menu since the the menu
-      // methods need the subCommands value in order to properly calculate
-      // and format the menu methods
-      enrichedCommandEntry = { ...commandEntry, subCommands };
-      this.manifest.set(commandId, enrichedCommandEntry);
-      LOG.debug(`"${commandId}" - Finding sub-commands... done`);
-
-      // Enrich the entry.menu
-      LOG.debug(`"${commandId}" - Building help menu...`);
-      const helpMenu: string[] = [];
-      this.setHelpCommandUsage(commandId, enrichedCommandEntry, helpMenu);
-      this.setHelpCommandDescription(enrichedCommandEntry, helpMenu);
-      this.setHelpCommandSubCommands(enrichedCommandEntry, helpMenu);
-      this.setHelpCommandArgs(enrichedCommandEntry, helpMenu);
-      this.setHelpCommandOptions(enrichedCommandEntry, helpMenu);
-      const help = helpMenu.join("\n");
-      enrichedCommandEntry = {
-        ...commandEntry,
-        data: { ...commandEntry.data, help },
-      };
-      this.manifest.set(commandId, enrichedCommandEntry);
-      LOG.debug(`"${commandId}" - Building help menu... done`);
+      // set the updates
+      this.manifest.set(cmdId, withHelp);
     }
     LOG.checkpointEnd();
   }
@@ -631,8 +698,12 @@ ${report}
    * a few fo the data options
    */
   async buildManifest() {
-    this.validateManifest();
-    this.enrichManifest();
-    await this.writeManifestToDisk();
+    try {
+      await this._enrichManifest();
+      this._validateManifest();
+      await this.writeManifestToDisk();
+    } catch (error) {
+      throw LOG.fatal(new Error(String(error)));
+    }
   }
 }

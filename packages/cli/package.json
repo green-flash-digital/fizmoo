@@ -5,7 +5,8 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./commands": "./dist/"
   },
   "bin": "./bin/index.js",
   "scripts": {
@@ -29,7 +30,7 @@
     "@fizmoo/core": "workspace:^",
     "@fizmoo/runtime": "workspace:^",
     "isoscribe": "^0.1.4",
-    "ts-jolt": "^0.2.1",
+    "ts-jolt": "^0.2.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {

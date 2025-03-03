@@ -33,7 +33,7 @@ export class FizmooRuntime {
     this._commandArgs = new Map();
     this._errors = new RuntimeError({
       cliName:
-        this._manifest.get(fizmooConstants.COMMAND_ROOT)?.data.name ??
+        this._manifest.get(fizmooConstants.COMMAND_ROOT)?.properties.name ??
         "<your cli>",
     });
     this._parseExpression = this._parseExpression.bind(this);
@@ -151,7 +151,7 @@ export class FizmooRuntime {
     commandDef: FizmooManifestEntry,
     runtimeOptions: RuntimeOptionsMap
   ): void {
-    const optionsDef = commandDef.data.options ?? {};
+    const optionsDef = commandDef.properties.options ?? {};
 
     // Loop through all of the runtime options to validate & parse
     for (const [rOptionId, rOption] of runtimeOptions) {
@@ -289,7 +289,7 @@ export class FizmooRuntime {
     commandDef: FizmooManifestEntry,
     runtimeArgs: RuntimeArgsMap
   ) {
-    const argsDef = commandDef.data.args ?? {};
+    const argsDef = commandDef.properties.args ?? {};
 
     // Loop through all of the runtime args to validate & parse
     for (const [rArgId, rArg] of runtimeArgs) {
@@ -443,7 +443,7 @@ export class FizmooRuntime {
     // Check to see if we should just print the menu
     const isParentCommand = (commandDef.subCommands ?? []).length > 0;
     if (options.has("help") || isParentCommand) {
-      return console.log(commandDef.data.help);
+      return console.log(commandDef.properties.help);
     }
 
     // Validate, parse, and set the command options
@@ -461,7 +461,7 @@ export class FizmooRuntime {
     }
 
     // Run the action
-    if (!commandDef.data.hasAction) {
+    if (!commandDef.properties.hasAction) {
       return this._errors.log(this._errors.MISSING_ACTION(commandId));
     }
     const importPath = path.resolve(this._cwd, commandDef.file);

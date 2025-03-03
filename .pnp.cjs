@@ -305,7 +305,6 @@ const RAW_RUNTIME_STATE =
           ["isoscribe", "npm:0.1.4"],\
           ["picocolors", "npm:1.1.1"],\
           ["picomatch", "npm:4.0.2"],\
-          ["ts-hot-import", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
           ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
@@ -1726,17 +1725,6 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["tmp", "npm:0.0.33"],\
           ["os-tmpdir", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["ts-hot-import", [\
-      ["npm:0.1.4", {\
-        "packageLocation": "../../../.yarn/berry/cache/ts-hot-import-npm-0.1.4-e915c7474c-10c0.zip/node_modules/ts-hot-import/",\
-        "packageDependencies": [\
-          ["ts-hot-import", "npm:0.1.4"],\
-          ["esbuild", "npm:0.25.0"],\
-          ["ts-jolt", "npm:0.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\

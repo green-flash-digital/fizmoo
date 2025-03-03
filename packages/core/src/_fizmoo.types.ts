@@ -132,7 +132,7 @@ export type FizmooManifest = {
   [key: string]: FizmooManifestEntry;
 };
 
-export type FizmooManifestEntryData = {
+export type FizmooManifestEntryCommand = {
   /**
    * The name of the command that will call
    */
@@ -181,5 +181,5 @@ export type FizmooManifestEntry = {
    * The ids of the immediate sub-commands
    */
   subCommands: string[] | null;
-  data: FizmooManifestEntryData;
+  properties: FizmooManifestEntryCommand;
 };
