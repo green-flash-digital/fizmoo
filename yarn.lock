@@ -1268,15 +1268,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22.13.8":
-  version: 22.13.8
-  resolution: "@types/node@npm:22.13.8"
-  dependencies:
-    undici-types: "npm:~6.20.0"
-  checksum: 10c0/bfc92b734a9dce6ac5daee0a52feccdf5dcb3804d895e4bc5384e2f4644612b8801725cd03c8c3c0888fb5eeb16b875877ac44b77641e0196dc1a837b1c2a366
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:22.13.9":
   version: 22.13.9
   resolution: "@types/node@npm:22.13.9"
@@ -1930,7 +1921,7 @@ __metadata:
   dependencies:
     "@fizmoo/core": "workspace:*"
     "@fizmoo/runtime": "workspace:*"
-    "@types/node": "npm:22.13.8"
+    "@types/node": "npm:22.13.9"
     isoscribe: "npm:0.1.4"
     ts-jolt: "npm:0.2.2"
     tsx: "npm:4.19.3"

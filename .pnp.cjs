@@ -1569,14 +1569,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:22.13.8", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.13.8-e280e411c3-10c0.zip/node_modules/@types/node/",\
-        "packageDependencies": [\
-          ["@types/node", "npm:22.13.8"],\
-          ["undici-types", "npm:6.20.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:22.13.9", {\
         "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.13.9-565bb4cd14-10c0.zip/node_modules/@types/node/",\
         "packageDependencies": [\
@@ -2213,7 +2205,7 @@ const RAW_RUNTIME_STATE =
           ["fizmoo", "workspace:packages/cli"],\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["@types/node", "npm:22.13.8"],\
+          ["@types/node", "npm:22.13.9"],\
           ["isoscribe", "npm:0.1.4"],\
           ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
