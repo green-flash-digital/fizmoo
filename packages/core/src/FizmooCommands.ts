@@ -13,8 +13,7 @@ import { writeFile } from "node:fs/promises";
 import { printAsBullets } from "isoscribe";
 import pc from "picocolors";
 import { fizmooConstants } from "./_fizmoo.utils.public.js";
-import { build } from "esbuild";
-import { TempFile } from "ts-jolt/node";
+import { hotImport } from "ts-hot-import";
 
 type MalformedCommandMode =
   | { type: "CLI_NAME_CONFLICT" }
@@ -164,25 +163,7 @@ export class FizmooCommands {
   }
 
   private async _importCommandModule(commandPath: string) {
-    async function transpileCommandFile() {
-      LOG.debug("Transpiling command file to parse", commandPath);
-      const result = await build({
-        entryPoints: [commandPath],
-        tsconfigRaw: JSON.stringify("ts-jolt/tsconfig/library"),
-        write: false,
-      });
-      const outputFile = result.outputFiles[0];
-      const outputFileContents = Buffer.from(outputFile.contents).toString(
-        "utf-8"
-      );
-      const tempFile = new TempFile();
-      const filePath = await tempFile.create(outputFileContents, "mjs");
-      const configModule = await import(`file://${filePath}`);
-      tempFile.cleanup();
-      return configModule as Command;
-    }
-
-    const res = await tryHandle(transpileCommandFile)();
+    const res = await tryHandle(hotImport<Command>)(commandPath);
     if (res.hasError) {
       throw new Error(
         `Error when attempting to import the command during parsing: ${res.error.message}`

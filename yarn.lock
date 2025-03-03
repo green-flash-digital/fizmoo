@@ -185,6 +185,8 @@ __metadata:
   resolution: "@fizmoo/cli-sandbox@workspace:packages/cli-sandbox"
   dependencies:
     fizmoo: "workspace:^"
+  bin:
+    cli-sandbox: ./bin/index.js
   languageName: unknown
   linkType: soft
 
@@ -193,16 +195,17 @@ __metadata:
   resolution: "@fizmoo/core@workspace:packages/core"
   dependencies:
     "@inquirer/prompts": "npm:^7.3.2"
-    "@types/node": "npm:^22.13.5"
+    "@types/node": "npm:^22.13.8"
     "@types/picomatch": "npm:^3.0.2"
     dotdir: "npm:^0.3.1"
     esbuild: "npm:^0.25.0"
     isoscribe: "npm:^0.1.4"
     picocolors: "npm:^1.1.1"
     picomatch: "npm:^4.0.2"
+    ts-hot-import: "npm:^0.1.3"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
-    typescript: "npm:^5.7.3"
+    typescript: "npm:^5.8.2"
     zod: "npm:^3.24.2"
     zod-to-json-schema: "npm:^3.24.3"
   languageName: unknown
@@ -213,12 +216,12 @@ __metadata:
   resolution: "@fizmoo/runtime@workspace:packages/runtime"
   dependencies:
     "@fizmoo/core": "workspace:^"
-    "@types/node": "npm:^22.13.5"
+    "@types/node": "npm:^22.13.8"
     esbuild: "npm:^0.25.0"
     isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
-    typescript: "npm:^5.7.3"
+    typescript: "npm:^5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -226,7 +229,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@gfdigital/fizmoo@workspace:."
   dependencies:
-    typescript: "npm:^5.7.3"
+    typescript: "npm:^5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -507,12 +510,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.13.5":
-  version: 22.13.5
-  resolution: "@types/node@npm:22.13.5"
+"@types/node@npm:^22.13.8":
+  version: 22.13.8
+  resolution: "@types/node@npm:22.13.8"
   dependencies:
     undici-types: "npm:~6.20.0"
-  checksum: 10c0/a2e7ed7bb0690e439004779baedeb05159c5cc41ef6d81c7a6ebea5303fde4033669e1c0e41ff7453b45fd2fea8dbd55fddfcd052950c7fcae3167c970bca725
+  checksum: 10c0/bfc92b734a9dce6ac5daee0a52feccdf5dcb3804d895e4bc5384e2f4644612b8801725cd03c8c3c0888fb5eeb16b875877ac44b77641e0196dc1a837b1c2a366
   languageName: node
   linkType: hard
 
@@ -655,18 +658,18 @@ __metadata:
   dependencies:
     "@fizmoo/core": "workspace:^"
     "@fizmoo/runtime": "workspace:^"
-    "@types/node": "npm:^22.13.5"
+    "@types/node": "npm:^22.13.8"
     fizmoo: "workspace:^"
     isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
-    typescript: "npm:^5.7.3"
+    typescript: "npm:^5.8.2"
   bin:
     core-sandbox: ./bin/index.js
   languageName: unknown
   linkType: soft
 
-"cross-spawn@npm:^7.0.0":
+"cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
   dependencies:
@@ -853,11 +856,11 @@ __metadata:
   dependencies:
     "@fizmoo/core": "workspace:^"
     "@fizmoo/runtime": "workspace:^"
-    "@types/node": "npm:^22.13.5"
+    "@types/node": "npm:^22.13.8"
     isoscribe: "npm:^0.1.4"
     ts-jolt: "npm:^0.2.1"
     tsx: "npm:^4.19.3"
-    typescript: "npm:^5.7.3"
+    typescript: "npm:^5.8.2"
     zod: "npm:^3.24.2"
   bin:
     fizmoo: ./bin/index.js
@@ -865,12 +868,12 @@ __metadata:
   linkType: soft
 
 "foreground-child@npm:^3.1.0":
-  version: 3.3.0
-  resolution: "foreground-child@npm:3.3.0"
+  version: 3.3.1
+  resolution: "foreground-child@npm:3.3.1"
   dependencies:
-    cross-spawn: "npm:^7.0.0"
+    cross-spawn: "npm:^7.0.6"
     signal-exit: "npm:^4.0.1"
-  checksum: 10c0/028f1d41000553fcfa6c4bb5c372963bf3d9bf0b1f25a87d1a6253014343fb69dfb1b42d9625d7cf44c8ba429940f3d0ff718b62105d4d4a4f6ef8ca0a53faa2
+  checksum: 10c0/8986e4af2430896e65bc2788d6679067294d6aee9545daefc84923a0a4b399ad9c7a3ea7bd8c0b2b80fdf4a92de4c69df3f628233ff3224260e9c1541a9e9ed3
   languageName: node
   linkType: hard
 
@@ -1091,8 +1094,8 @@ __metadata:
   linkType: hard
 
 "minipass-fetch@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "minipass-fetch@npm:4.0.0"
+  version: 4.0.1
+  resolution: "minipass-fetch@npm:4.0.1"
   dependencies:
     encoding: "npm:^0.1.13"
     minipass: "npm:^7.0.3"
@@ -1101,7 +1104,7 @@ __metadata:
   dependenciesMeta:
     encoding:
       optional: true
-  checksum: 10c0/7fa30ce7c373fb6f94c086b374fff1589fd7e78451855d2d06c2e2d9df936d131e73e952163063016592ed3081444bd8d1ea608533313b0149156ce23311da4b
+  checksum: 10c0/a3147b2efe8e078c9bf9d024a0059339c5a09c5b1dded6900a219c218cc8b1b78510b62dae556b507304af226b18c3f1aeb1d48660283602d5b6586c399eed5c
   languageName: node
   linkType: hard
 
@@ -1459,10 +1462,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jolt@npm:0.2.1, ts-jolt@npm:^0.2.1":
+"ts-hot-import@npm:^0.1.3":
+  version: 0.1.4
+  resolution: "ts-hot-import@npm:0.1.4"
+  dependencies:
+    esbuild: "npm:^0.25.0"
+    ts-jolt: "npm:^0.2.2"
+  checksum: 10c0/245701f17705a83b2199cb0767fee5bf7e57d5e5e12c42193afcd031dd5bc5ea755ed09af1bfeeb922a6f37381415dab84eab3f2f64980896802b8ba948bed20
+  languageName: node
+  linkType: hard
+
+"ts-jolt@npm:0.2.1":
   version: 0.2.1
   resolution: "ts-jolt@npm:0.2.1"
-  checksum: 10c0/c255becdf79f6efb6638f7fb11d1dc6aa28900768fdd8318e4f42bf7dc0891e9cf2146c72f526abbc4acee28afc6a7d9b703669253201a72f176104497c5720c
+  checksum: 10c0/7cc73f63fc894a9d38785030c94677dcce1aa78b130665d3822d0223ff124252868afba32468eb2bfb47324508a652dd21f672706b3b8268fc91e4370199d5ee
+  languageName: node
+  linkType: hard
+
+"ts-jolt@npm:^0.2.1, ts-jolt@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "ts-jolt@npm:0.2.2"
+  checksum: 10c0/7d236fe09b8adf276f22835a28114ad066e0d10867a0250f9195c25d77fd06f61d0691a9d38894d707b0678f1d60917b9ec358e4c53ce437cb6c3f19dfdc7d18
   languageName: node
   linkType: hard
 
@@ -1489,23 +1509,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.7.3":
-  version: 5.7.3
-  resolution: "typescript@npm:5.7.3"
+"typescript@npm:^5.8.2":
+  version: 5.8.2
+  resolution: "typescript@npm:5.8.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/b7580d716cf1824736cc6e628ab4cd8b51877408ba2be0869d2866da35ef8366dd6ae9eb9d0851470a39be17cbd61df1126f9e211d8799d764ea7431d5435afa
+  checksum: 10c0/5c4f6fbf1c6389b6928fe7b8fcd5dc73bb2d58cd4e3883f1d774ed5bd83b151cbac6b7ecf11723de56d4676daeba8713894b1e9af56174f2f9780ae7848ec3c6
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>":
-  version: 5.7.3
-  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A^5.8.2#optional!builtin<compat/typescript>":
+  version: 5.8.2
+  resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/6fd7e0ed3bf23a81246878c613423730c40e8bdbfec4c6e4d7bf1b847cbb39076e56ad5f50aa9d7ebd89877999abaee216002d3f2818885e41c907caaa192cc4
+  checksum: 10c0/5448a08e595cc558ab321e49d4cac64fb43d1fa106584f6ff9a8d8e592111b373a995a1d5c7f3046211c8a37201eb6d0f1566f15cdb7a62a5e3be01d087848e2
   languageName: node
   linkType: hard
 

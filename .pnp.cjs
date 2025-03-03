@@ -52,7 +52,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -298,16 +298,17 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@inquirer/prompts", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:7.3.2"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["@types/picomatch", "npm:3.0.2"],\
           ["dotdir", "npm:0.3.1"],\
           ["esbuild", "npm:0.25.0"],\
           ["isoscribe", "npm:0.1.4"],\
           ["picocolors", "npm:1.1.1"],\
           ["picomatch", "npm:4.0.2"],\
-          ["ts-jolt", "npm:0.2.1"],\
+          ["ts-hot-import", "npm:0.1.4"],\
+          ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["zod", "npm:3.24.2"],\
           ["zod-to-json-schema", "virtual:9067c8e813b6eb87889b6f0f3fbc0015dd64ba65d52315f357cda78cbeeb8959ac131f378ac662c8345d441e072846c76cd57799ab6f68c094408435df7566d3#npm:3.24.3"]\
         ],\
@@ -320,12 +321,12 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
           ["@fizmoo/core", "workspace:packages/core"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["esbuild", "npm:0.25.0"],\
           ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.1"],\
+          ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -335,7 +336,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["@gfdigital/fizmoo", "workspace:."],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -355,7 +356,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/figures", "npm:1.0.10"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["ansi-escapes", "npm:4.3.2"],\
           ["yoctocolors-cjs", "npm:2.1.2"]\
         ],\
@@ -379,7 +380,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/confirm", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:5.1.6"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"]\
+          ["@types/node", "npm:22.13.8"]\
         ],\
         "packagePeers": [\
           "@types/node"\
@@ -401,7 +402,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/figures", "npm:1.0.10"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["ansi-escapes", "npm:4.3.2"],\
           ["cli-width", "npm:4.1.0"],\
           ["mute-stream", "npm:2.0.0"],\
@@ -429,7 +430,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/editor", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.2.7"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["external-editor", "npm:3.1.0"]\
         ],\
         "packagePeers": [\
@@ -452,7 +453,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/expand", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.0.9"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["yoctocolors-cjs", "npm:2.1.2"]\
         ],\
         "packagePeers": [\
@@ -484,7 +485,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/input", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.1.6"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"]\
+          ["@types/node", "npm:22.13.8"]\
         ],\
         "packagePeers": [\
           "@types/node"\
@@ -506,7 +507,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/number", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:3.0.9"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"]\
+          ["@types/node", "npm:22.13.8"]\
         ],\
         "packagePeers": [\
           "@types/node"\
@@ -528,7 +529,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/password", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.0.9"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["ansi-escapes", "npm:4.3.2"]\
         ],\
         "packagePeers": [\
@@ -559,7 +560,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/rawlist", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.0.9"],\
           ["@inquirer/search", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:3.0.9"],\
           ["@inquirer/select", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.0.9"],\
-          ["@types/node", "npm:22.13.5"]\
+          ["@types/node", "npm:22.13.8"]\
         ],\
         "packagePeers": [\
           "@types/node"\
@@ -581,7 +582,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/rawlist", "virtual:0d456aa7478b495a4393241790865314844bf3c96d03f5f1972cc102970f08612ecadda4e115f3ca543bdbdb03d3e340df71b61dbad068947c10294fde5e8750#npm:4.0.9"],\
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["yoctocolors-cjs", "npm:2.1.2"]\
         ],\
         "packagePeers": [\
@@ -605,7 +606,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/figures", "npm:1.0.10"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["yoctocolors-cjs", "npm:2.1.2"]\
         ],\
         "packagePeers": [\
@@ -629,7 +630,7 @@ const RAW_RUNTIME_STATE =
           ["@inquirer/core", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:10.1.7"],\
           ["@inquirer/figures", "npm:1.0.10"],\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["ansi-escapes", "npm:4.3.2"],\
           ["yoctocolors-cjs", "npm:2.1.2"]\
         ],\
@@ -651,7 +652,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/__virtual__/@inquirer-type-virtual-2502666416/4/.yarn/berry/cache/@inquirer-type-npm-3.0.4-5d65c9c443-10c0.zip/node_modules/@inquirer/type/",\
         "packageDependencies": [\
           ["@inquirer/type", "virtual:8cc89464ed0d1cc44115f2cb98bddd54e236716bde48768cb113ad4e303b3cf6a24af80e0cdc4574d9e128c67ff5dfb68e93e4f2fe62451cada8f6d2e256c24f#npm:3.0.4"],\
-          ["@types/node", "npm:22.13.5"]\
+          ["@types/node", "npm:22.13.8"]\
         ],\
         "packagePeers": [\
           "@types/node"\
@@ -727,10 +728,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/node", [\
-      ["npm:22.13.5", {\
-        "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.13.5-4c5912eee2-10c0.zip/node_modules/@types/node/",\
+      ["npm:22.13.8", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-node-npm-22.13.8-e280e411c3-10c0.zip/node_modules/@types/node/",\
         "packageDependencies": [\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["undici-types", "npm:6.20.0"]\
         ],\
         "linkType": "HARD"\
@@ -899,12 +900,12 @@ const RAW_RUNTIME_STATE =
           ["core-sandbox", "workspace:packages/core-sandbox"],\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["fizmoo", "workspace:packages/cli"],\
           ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.1"],\
+          ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -1070,21 +1071,21 @@ const RAW_RUNTIME_STATE =
           ["fizmoo", "workspace:packages/cli"],\
           ["@fizmoo/core", "workspace:packages/core"],\
           ["@fizmoo/runtime", "workspace:packages/runtime"],\
-          ["@types/node", "npm:22.13.5"],\
+          ["@types/node", "npm:22.13.8"],\
           ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.1"],\
+          ["ts-jolt", "npm:0.2.2"],\
           ["tsx", "npm:4.19.3"],\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"],\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"],\
           ["zod", "npm:3.24.2"]\
         ],\
         "linkType": "SOFT"\
       }]\
     ]],\
     ["foreground-child", [\
-      ["npm:3.3.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/foreground-child-npm-3.3.0-b8be745271-10c0.zip/node_modules/foreground-child/",\
+      ["npm:3.3.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/foreground-child-npm-3.3.1-b7775fda04-10c0.zip/node_modules/foreground-child/",\
         "packageDependencies": [\
-          ["foreground-child", "npm:3.3.0"],\
+          ["foreground-child", "npm:3.3.1"],\
           ["cross-spawn", "npm:7.0.6"],\
           ["signal-exit", "npm:4.1.0"]\
         ],\
@@ -1126,7 +1127,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/glob-npm-10.4.5-8c63175f05-10c0.zip/node_modules/glob/",\
         "packageDependencies": [\
           ["glob", "npm:10.4.5"],\
-          ["foreground-child", "npm:3.3.0"],\
+          ["foreground-child", "npm:3.3.1"],\
           ["jackspeak", "npm:3.4.3"],\
           ["minimatch", "npm:9.0.5"],\
           ["minipass", "npm:7.1.2"],\
@@ -1244,7 +1245,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/isoscribe-npm-0.1.4-e557eef28e-10c0.zip/node_modules/isoscribe/",\
         "packageDependencies": [\
           ["isoscribe", "npm:0.1.4"],\
-          ["ts-jolt", "npm:0.2.1"]\
+          ["ts-jolt", "npm:0.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1287,7 +1288,7 @@ const RAW_RUNTIME_STATE =
           ["cacache", "npm:19.0.1"],\
           ["http-cache-semantics", "npm:4.1.1"],\
           ["minipass", "npm:7.1.2"],\
-          ["minipass-fetch", "npm:4.0.0"],\
+          ["minipass-fetch", "npm:4.0.1"],\
           ["minipass-flush", "npm:1.0.5"],\
           ["minipass-pipeline", "npm:1.2.4"],\
           ["negotiator", "npm:1.0.0"],\
@@ -1336,10 +1337,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["minipass-fetch", [\
-      ["npm:4.0.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/minipass-fetch-npm-4.0.0-d4e49e0194-10c0.zip/node_modules/minipass-fetch/",\
+      ["npm:4.0.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/minipass-fetch-npm-4.0.1-ce1d15e957-10c0.zip/node_modules/minipass-fetch/",\
         "packageDependencies": [\
-          ["minipass-fetch", "npm:4.0.0"],\
+          ["minipass-fetch", "npm:4.0.1"],\
           ["encoding", "npm:0.1.13"],\
           ["minipass", "npm:7.1.2"],\
           ["minipass-sized", "npm:1.0.3"],\
@@ -1729,11 +1730,29 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["ts-hot-import", [\
+      ["npm:0.1.4", {\
+        "packageLocation": "../../../.yarn/berry/cache/ts-hot-import-npm-0.1.4-e915c7474c-10c0.zip/node_modules/ts-hot-import/",\
+        "packageDependencies": [\
+          ["ts-hot-import", "npm:0.1.4"],\
+          ["esbuild", "npm:0.25.0"],\
+          ["ts-jolt", "npm:0.2.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["ts-jolt", [\
       ["npm:0.2.1", {\
         "packageLocation": "../../../.yarn/berry/cache/ts-jolt-npm-0.2.1-481be474e1-10c0.zip/node_modules/ts-jolt/",\
         "packageDependencies": [\
           ["ts-jolt", "npm:0.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:0.2.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/ts-jolt-npm-0.2.2-87636019dc-10c0.zip/node_modules/ts-jolt/",\
+        "packageDependencies": [\
+          ["ts-jolt", "npm:0.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1760,10 +1779,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["typescript", [\
-      ["patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5", {\
-        "packageLocation": "../../../.yarn/berry/cache/typescript-patch-6da68bae26-10c0.zip/node_modules/typescript/",\
+      ["patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5", {\
+        "packageLocation": "../../../.yarn/berry/cache/typescript-patch-26c53754b1-10c0.zip/node_modules/typescript/",\
         "packageDependencies": [\
-          ["typescript", "patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=5786d5"]\
+          ["typescript", "patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=5786d5"]\
         ],\
         "linkType": "HARD"\
       }]\

@@ -20,7 +20,5 @@
   "dependencies": {
     "fizmoo": "workspace:^"
   },
-  "bin": {
-    "@fizmoo/cli-sandbox": "./bin/index.js"
-  }
+  "bin": "./bin/index.js"
 }
