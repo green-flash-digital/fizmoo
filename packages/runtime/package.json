@@ -1,6 +1,6 @@
 {
   "name": "@fizmoo/runtime",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The fizmoo runtime that interprets the generated fizmoo manifest",
   "type": "module",
   "publishConfig": {
