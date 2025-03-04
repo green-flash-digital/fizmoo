@@ -1,5 +1,11 @@
 # @fizmoo/runtime
 
+## 0.1.2
+
+### Patch Changes
+
+- 708b339: Removes the yarn workspace\* protocol to ensure that changesets can properly version each package
+
 ## 0.1.1
 
 ## 0.1.0

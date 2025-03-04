@@ -1,6 +1,6 @@
 {
   "name": "@fizmoo/runtime",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The fizmoo runtime that interprets the generated fizmoo manifest",
   "type": "module",
   "publishConfig": {
@@ -28,7 +28,7 @@
     "ts-jolt": "0.2.2"
   },
   "devDependencies": {
-    "@fizmoo/core": "0.1.1",
+    "@fizmoo/core": "0.1.2",
     "@types/node": "22.13.9",
     "esbuild": "0.25.0",
     "isoscribe": "0.1.4",

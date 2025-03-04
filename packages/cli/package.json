@@ -1,6 +1,6 @@
 {
   "name": "fizmoo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Effortlessly create 100% type-safe, self-documenting Node.js CLIs by simply adding files to your file system.",
   "type": "module",
   "sideEffects": false,
@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "dependencies": {
-    "@fizmoo/core": "0.1.1",
-    "@fizmoo/runtime": "0.1.1",
+    "@fizmoo/core": "0.1.2",
+    "@fizmoo/runtime": "0.1.2",
     "isoscribe": "0.1.4",
     "ts-jolt": "0.2.2",
     "zod": "3.24.2"
