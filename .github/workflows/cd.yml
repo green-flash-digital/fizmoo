@@ -38,9 +38,6 @@ jobs:
 
         # TODO: Need to add a step in here to publish the json config
 
-      - name: Install Changesets Globally
-        run: npm install -g @changesets/cli
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
