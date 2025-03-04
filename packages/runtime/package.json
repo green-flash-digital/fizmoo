@@ -28,7 +28,7 @@
     "ts-jolt": "0.2.2"
   },
   "devDependencies": {
-    "@fizmoo/core": "workspace:*",
+    "@fizmoo/core": "0.1.1",
     "@types/node": "22.13.9",
     "esbuild": "0.25.0",
     "isoscribe": "0.1.4",
