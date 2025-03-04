@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "turbo build",
-    "release": "yarn changeset publish"
+    "release": "npx changeset publish"
   },
   "homepage": "https://github.com/green-flash-digital/fizmoo#readme",
   "packageManager": "yarn@4.7.0",
