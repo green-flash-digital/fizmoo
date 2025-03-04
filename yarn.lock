@@ -681,10 +681,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fizmoo/core-sandbox@workspace:packages/core-sandbox"
   dependencies:
-    "@fizmoo/core": "npm:0.1.1"
-    "@fizmoo/runtime": "npm:0.1.1"
+    "@fizmoo/core": "npm:0.1.2"
+    "@fizmoo/runtime": "npm:0.1.2"
     "@types/node": "npm:22.13.9"
-    fizmoo: "npm:0.1.1"
+    fizmoo: "npm:0.1.2"
     isoscribe: "npm:0.1.4"
     ts-jolt: "npm:0.2.2"
     tsx: "npm:4.19.3"
@@ -694,7 +694,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fizmoo/core@npm:0.1.1, @fizmoo/core@workspace:packages/core":
+"@fizmoo/core@npm:0.1.2, @fizmoo/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@fizmoo/core@workspace:packages/core"
   dependencies:
@@ -715,11 +715,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@fizmoo/runtime@npm:0.1.1, @fizmoo/runtime@workspace:packages/runtime":
+"@fizmoo/runtime@npm:0.1.2, @fizmoo/runtime@workspace:packages/runtime":
   version: 0.0.0-use.local
   resolution: "@fizmoo/runtime@workspace:packages/runtime"
   dependencies:
-    "@fizmoo/core": "npm:0.1.1"
+    "@fizmoo/core": "npm:0.1.2"
     "@types/node": "npm:22.13.9"
     esbuild: "npm:0.25.0"
     isoscribe: "npm:0.1.4"
@@ -1915,12 +1915,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fizmoo@npm:0.1.1, fizmoo@workspace:*, fizmoo@workspace:packages/cli":
+"fizmoo@npm:0.1.2, fizmoo@workspace:*, fizmoo@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "fizmoo@workspace:packages/cli"
   dependencies:
-    "@fizmoo/core": "npm:0.1.1"
-    "@fizmoo/runtime": "npm:0.1.1"
+    "@fizmoo/core": "npm:0.1.2"
+    "@fizmoo/runtime": "npm:0.1.2"
     "@types/node": "npm:22.13.9"
     isoscribe: "npm:0.1.4"
     ts-jolt: "npm:0.2.2"
