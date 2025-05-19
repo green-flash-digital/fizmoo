@@ -1,5 +1,11 @@
 # @fizmoo/core
 
+## 0.1.4
+
+### Patch Changes
+
+- 778b8ad: Adds `@fizmoo/core` as required dependency
+
 ## 0.1.3
 
 ### Patch Changes
