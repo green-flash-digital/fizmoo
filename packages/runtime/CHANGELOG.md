@@ -1,5 +1,11 @@
 # @fizmoo/runtime
 
+## 0.1.3
+
+### Patch Changes
+
+- fd72b5d: Upgrades dependencies
+
 ## 0.1.2
 
 ### Patch Changes

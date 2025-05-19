@@ -1,6 +1,6 @@
 {
   "name": "@fizmoo/core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Effortlessly create 100% type-safe, self-documenting Node.js CLIs by simply adding files to your file system.",
   "type": "module",
   "sideEffects": false,
