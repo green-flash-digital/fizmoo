@@ -58,7 +58,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/cli@npm:2.29.4, @changesets/cli@npm:^2.29.2":
+"@changesets/cli@npm:2.29.4, @changesets/cli@npm:^2.29.2, @changesets/cli@npm:^2.29.4":
   version: 2.29.4
   resolution: "@changesets/cli@npm:2.29.4"
   dependencies:
@@ -714,7 +714,7 @@ __metadata:
     "@inquirer/prompts": "npm:7.5.1"
     "@types/node": "npm:22.15.19"
     "@types/picomatch": "npm:4.0.0"
-    dotdir: "npm:0.3.1"
+    dotdir: "npm:0.3.2"
     esbuild: "npm:0.25.4"
     isoscribe: "npm:0.2.0"
     picocolors: "npm:1.1.1"
@@ -723,7 +723,7 @@ __metadata:
     tsx: "npm:4.19.4"
     typescript: "npm:5.8.3"
     wrangler: "npm:4.15.2"
-    zod: "npm:3.25.1"
+    zod: "npm:3.25.3"
     zod-to-json-schema: "npm:3.24.5"
   languageName: unknown
   linkType: soft
@@ -1597,13 +1597,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotdir@npm:0.3.1":
-  version: 0.3.1
-  resolution: "dotdir@npm:0.3.1"
+"dotdir@npm:0.3.2":
+  version: 0.3.2
+  resolution: "dotdir@npm:0.3.2"
   dependencies:
-    esbuild: "npm:^0.25.0"
-    ts-jolt: "npm:0.2.1"
-  checksum: 10c0/6b39ebc41edafd9a0a735f0c73d3daa69787dc97702efd160bcbd03d6e5c3b9f492ebebd8b872b5ccba2c03e787b3a7da43ae64e8d4d423612644a93759fdb8f
+    "@changesets/cli": "npm:^2.29.4"
+    esbuild: "npm:^0.25.4"
+    ts-jolt: "npm:0.2.3"
+  checksum: 10c0/190259eca8dcf55c1517370530ca49c94a3b82bffd7a11d7ae86e8bbbefd2417f2cedbba8e74ac3fbe6229232303ca840f1947e77bb9cec7673c56e547859569
   languageName: node
   linkType: hard
 
@@ -1661,7 +1662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:0.25.4":
+"esbuild@npm:0.25.4, esbuild@npm:^0.25.4":
   version: 0.25.4
   resolution: "esbuild@npm:0.25.4"
   dependencies:
@@ -1747,7 +1748,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.25.0, esbuild@npm:~0.25.0":
+"esbuild@npm:~0.25.0":
   version: 0.25.0
   resolution: "esbuild@npm:0.25.0"
   dependencies:
@@ -1934,7 +1935,9 @@ __metadata:
     ts-jolt: "npm:0.2.3"
     tsx: "npm:4.19.4"
     typescript: "npm:5.8.3"
-    zod: "npm:3.25.1"
+    zod: "npm:3.25.3"
+  peerDependencies:
+    "@fizmoo/runtime": "*"
   bin:
     fizmoo: ./bin/index.js
   languageName: unknown
@@ -3089,13 +3092,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jolt@npm:0.2.1":
-  version: 0.2.1
-  resolution: "ts-jolt@npm:0.2.1"
-  checksum: 10c0/7cc73f63fc894a9d38785030c94677dcce1aa78b130665d3822d0223ff124252868afba32468eb2bfb47324508a652dd21f672706b3b8268fc91e4370199d5ee
-  languageName: node
-  linkType: hard
-
 "ts-jolt@npm:0.2.3, ts-jolt@npm:^0.2.3":
   version: 0.2.3
   resolution: "ts-jolt@npm:0.2.3"
@@ -3462,9 +3458,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.25.1":
-  version: 3.25.1
-  resolution: "zod@npm:3.25.1"
-  checksum: 10c0/41d81af0b2af257e12acafe3384deee22a20b094d800882e6bc8bc5d2b9d872cbf7233f64b08bb8944c7ec7ba7f9211235b5b1f72bff1ada154a04e0420d9bd1
+"zod@npm:3.25.3":
+  version: 3.25.3
+  resolution: "zod@npm:3.25.3"
+  checksum: 10c0/744bc6d8f1500fbda2ddc713540fea7db2354c585d256eed9064f11d89976c184e7472a999a6713d2ae8e148d9bc9f23aae0403c5eb57e45c8563cbd036aaa9d
   languageName: node
   linkType: hard
