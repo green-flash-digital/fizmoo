@@ -1,5 +1,11 @@
 # @fizmoo/core
 
+## 0.1.3
+
+### Patch Changes
+
+- fd72b5d: Upgrades dependencies
+
 ## 0.1.2
 
 ## 0.1.1
